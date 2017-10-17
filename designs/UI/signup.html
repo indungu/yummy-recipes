@@ -13,7 +13,7 @@
         <!--Font Awesome CSS-->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     </head>
-    <body>
+    <body class="mainBg">
         <header class="navbar navbar-toggleable-md navbar-light bg-primary bg-faded">
                 <nav class="container w-100">
                     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,21 +36,21 @@
                     </div>
                 </nav>
             </header>
-        <form class="container " action="./dashboard.html">
+        <form class="container form" action="./dashboard.html">
             <div class="form-group">
-                <label for="enterEmail">Email Address</label>
+                <label for="enterEmail" class="text-white">Email Address</label>
                 <input type="email" class="form-control" id="enterEmail" placeholder="Please enter a valid email address">
             </div>
             <div class="form-group">
-                    <label for="enterUsername">Username</label>
+                    <label for="enterUsername" class="text-white">Username</label>
                     <input type="text" class="form-control" id="enterUsername" placeholder="Enter prefered username">
             </div>
             <div class="form-group">
-                    <label for="enterPassword">Password</label>
+                    <label for="enterPassword" class="text-white">Password</label>
                     <input type="password" class="form-control" id="enterPassword" placeholder="Enter password">
             </div>                
             <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
+                    <label for="confirmPassword" class="text-white">Confirm Password</label>
                     <input type="password" class="form-control" id="confirmPassword" placeholder="Enter password">
             </div>
             <button class="btn btn-primary" type="submit" aria-describedby="termsofUse">Submit</button>

@@ -21,3 +21,35 @@ html {
     background-color: #f5f5f5;
     text-align: center;
 }
+
+/*form class*/
+.form{
+    background-color: rgba(14, 35, 47, 0.9);
+    max-width: 350px;
+    padding: 40px;
+    margin: 5px  auto;
+    border-radius: 5px;
+    box-shadow: 0px 3px 11px 3px rgba(14, 35, 47, 0.39);
+}
+
+/* Main Background */
+.mainBg {
+    margin: 0;
+    height: 100%;
+    background-image: url("../assets/bg1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+/* Alternative Background */
+.altMainBg {
+    margin: 0;
+    height: 100%;
+    background-image: url("../assets/bg2.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
