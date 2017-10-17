@@ -23,8 +23,24 @@ On successful it opens to a default view of the list of categories the user has 
 There is a `View Recipes` link button under each of the diplayed categories which when clicked reveals
  all the recipes in that category.
  
+ ## How to test
+ 
+ The project is still in the UI desing phase, as such you just need to follow the following steps to test
+ 
+ ```
+  1. Clone the repository: git clone https://github.com/indungu/yummy-recipes
+  2. Change directories: cd yummy-recipes
+  3. On a browser of choice (preferably Chrome/Firefox) open the following file designs/UI/index.html
+  4. Navigate the site as you would any other site.
+  5. (Chrome/Firefox Users) You can test the mobile appearance of the site by accessing developer tools 
+     [Ctrl+Shift+I] then toggle the device view to mobile through clicking the Toggle Device button or the 
+     following key combination shortcut [Ctrl+Shift+M]
+ ```
+ Please note that the above set testing instructions are generally from a User/Developer running Chrome/Firefox on Windows. Most of the same is transferable to Linux and Mac OSX as is but there might be slight differences, especially in step five.
+ 
  ## To-Do
  ```
   I.  Add Create/Delete capability for recipes and recipe categories
-  II. Implement backend with Python Flask Microframework
+  II. Improve aesthetic value of  the UI espectially for the welcome, signup and login pages
+  III. Implement backend with Python Flask Microframework
  ```
