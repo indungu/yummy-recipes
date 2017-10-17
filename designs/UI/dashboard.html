@@ -95,7 +95,10 @@
                         <!-- Pie Recipes -->
                         <div class="collapse" id="collapsePies">
                             <div class="card" style="margin-top: 10px">
-                            <div class="card-header">Pies</div>
+                            <div class="card-header">
+                                Pies
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#newRecipeModal">Add Recipe</button>
+                            </div>
                             <div class="card-block">
                                 <div id="accordion" role="tablist" aria-multiselectable="true">
                                     <div class="card">
@@ -120,10 +123,14 @@
                                                 <li>3 cups of all purpose baking floor</li>
                                                 <li>A lot of love</li>
                                             </ol>
-                                            <h6>Directions</h6>
+                                            <h6>Directions and Serving</h6>
                                             <p>Let's bake us some pie!!</p>
                                             <p> First... Check out my favorite recipe <a href="https://www.tasteofhome.com/recipes/cherry-cream--pie">here</a>!</p>
                                         </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
+                                            <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -148,10 +155,14 @@
                                                 <li>3 cups of all purpose baking floor</li>
                                                 <li>A lot of love</li>
                                             </ol>
-                                            <h6>Directions</h6>
+                                            <h6>Directions and Serving</h6>
                                             <p>Let's bake us some pie!!</p>
                                             <p> First... Check out my favorite recipe <a href="https://www.pillsbury.com/recipes/classic-chicken-pot-pie/1401d418-ac0b-4b50-ad09-c6f1243fb992">here</a>!</p>
                                         </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
+                                            <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -176,15 +187,52 @@
                                                 <li>3 cups of all purpose baking floor</li>
                                                 <li>A lot of love</li>
                                             </ol>
-                                            <h6>Directions</h6>
+                                            <h6>Directions and Serving</h6>
                                             <p>Let's bake us some pie!!</p>
                                             <p> First... Check out my favorite recipe <a href="https://www.tasteofhome.com/recipes/apple-pie">here</a>!</p>
                                         </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
+                                            <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- New Recipe Modal -->
+                        <div class="modal fade" id="newRecipeModal" tabindex="-1" role="dialog" aria-labelledby="newRecipeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form action="">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">New Recipe</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="funFact">Fun Fact</label>
+                                                <input type="text" class="form-control" id="funfact" placeholder="Tell us something fun about this recipe">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ingredientList">Ingredients</label>
+                                                <textarea class="form-control" name="ingredientEditor" id="inderientsList" placeholder="What ingredients do I need?"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="prepDirections">Directions and Serving</label>
+                                                <textarea class="form-control" name="directionsEditor" id="prepDirections" placeholder="How do I prepare it?"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" onclick="underConstruction()">Add Recipe</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         
                     </div>
@@ -203,5 +251,6 @@
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/script.js"></script>
         </body>
     </html>
