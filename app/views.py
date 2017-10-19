@@ -1,8 +1,7 @@
-"""Main App module"""
+"""Views module"""
+from flask import render_template
 
-from flask import Flask, render_template
-
-APP = Flask(__name__)
+from app import APP
 
 @APP.route('/')
 def index():
