@@ -1,6 +1,6 @@
 """Main App module"""
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 
 APP = Flask(__name__)
 
@@ -23,4 +23,3 @@ def login():
 def dashboard():
     """route to dashboard view"""
     return render_template('dashboard.html')
-
