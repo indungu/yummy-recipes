@@ -15,8 +15,8 @@ class UserManagementTestCase(unittest.TestCase):
         self.user_email = "fn@yummy.io"
         self.username = "fena"
         self.password = "fenamenal"
+        self.test_user = self.new_user.add_user(self.user_email, self.username, self.password)
 
     def test_user_creation(self):
         """test user is added successfully"""
-        test_user = self.new_user.add_user(self.user_email, self.username, self.password)
-        self.assertTrue(self.username in test_user.keys())
+        self.assertTrue(self.user_email in self.test_user.keys())

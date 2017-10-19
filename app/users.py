@@ -1,7 +1,7 @@
 """This module manages the users"""
 USERS = {
-    "indungu": {"email": "in@yummy.io", "username": "indungu", "password": "pass2017"},
-    "cbreezy": {"email": "cb@yummy.io", "username": "cbreezy", "password": "questions"}
+    "in@yummy.io": {"email": "in@yummy.io", "username": "indungu", "password": "pass2017"},
+    "cb@yummy.io": {"email": "cb@yummy.io", "username": "cbreezy", "password": "questions"}
 }
 
 class User(object):
@@ -16,9 +16,12 @@ class User(object):
     def add_user(self, email, username, password):
         """This method adds a new user to the app"""
         current_users = USERS.keys()
-        if username not in current_users:
+        if email not in current_users:
             new_user = {"email": email, "username": username, "password": password}
-            USERS[username] = new_user
+            USERS[email] = new_user
             return USERS
-        elif username in USERS.keys():
-            return "Sorry, that username is already taken, choose a different one"    
+        elif email in USERS.keys():
+            return "Sorry, that email is already taken, choose a different one"
+
+    def get_user(self, email, password):
+        """This method gets an existing user from the users's list"""

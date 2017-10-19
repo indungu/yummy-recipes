@@ -1,7 +1,6 @@
 # yummy-recipes
 
 [![Build Status](https://travis-ci.org/indungu/yummy-recipes.svg?branch=master)](https://travis-ci.org/indungu/yummy-recipes)
-
 [![Coverage Status](https://coveralls.io/repos/github/indungu/yummy-recipes/badge.svg?branch=master)](https://coveralls.io/github/indungu/yummy-recipes?branch=master)
 
 Yummy recipes provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
