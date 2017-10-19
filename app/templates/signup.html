@@ -1,0 +1,72 @@
+<!Doctype html>
+
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
+        <title>Yummy Recipes</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!--Custom CSS-->
+        <link rel="stylesheet" href="css/style.css">
+        <!--Font Awesome CSS-->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    <body class="mainBg">
+        <header class="navbar navbar-toggleable-md navbar-light bg-primary bg-faded">
+                <nav class="container w-100">
+                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Yummy Recipes</a>
+                    
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="index.html">Home</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Sign Up<span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="login.html">Login</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+        <form class="container form" action="./dashboard.html">
+            <div class="form-group">
+                <label for="enterEmail" class="text-white">Email Address</label>
+                <input type="email" class="form-control" id="enterEmail" placeholder="Please enter a valid email address">
+            </div>
+            <div class="form-group">
+                    <label for="enterUsername" class="text-white">Username</label>
+                    <input type="text" class="form-control" id="enterUsername" placeholder="Enter prefered username">
+            </div>
+            <div class="form-group">
+                    <label for="enterPassword" class="text-white">Password</label>
+                    <input type="password" class="form-control" id="enterPassword" placeholder="Enter password">
+            </div>                
+            <div class="form-group">
+                    <label for="confirmPassword" class="text-white">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Enter password">
+            </div>
+            <button class="btn btn-primary" type="submit" aria-describedby="termsofUse">Submit</button>
+            <small id="termsofUse" class="form-text text-muted">By Signing Up you expressly agree to our <a href="#">Terms and Conditions</a>.</small>
+            <br/>
+            <small class="form-text text-muted">Already have an account? <a href="./login.html">Login</a>.</small>
+        </form>
+
+        <footer class="footer">
+            <div class="container">
+                <span class="text-muted text-center">Designed with <i class="fa fa-heart"></i> by <a href="https://github.com/indungu">indungu</a></span>
+            </div>
+        </footer>
+        <!-- jQuery first then Tether and finally Bootstrap -->
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+</html>

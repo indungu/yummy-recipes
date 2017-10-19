@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.6"
+
+# Dependency intsall script
+install:
+  pip install -r requirements.txt
+
+# Test script(s)
+script:
+  pytest
