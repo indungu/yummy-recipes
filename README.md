@@ -1,5 +1,7 @@
 # yummy-recipes
 
+[![Build Status](https://travis-ci.org/indungu/yummy-recipes.svg?branch=master)](https://travis-ci.org/indungu/yummy-recipes)
+
 Yummy recipes provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
 
 follow this [link](https://indungu.github.io/yummy-recipes)
