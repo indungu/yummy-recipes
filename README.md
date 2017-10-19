@@ -20,7 +20,7 @@ On following the [link](https://indungu.github.io/yummy-recipes) a `Welcome` pag
 Click the `Sign Up` button and this opens the `signup` page where which you provide account creation details and click `Submit`
 to create your account.
 
-The Dashboard is really just a mock-up of how the complete and functional dashboard will look. 
+The Dashboard is really just a mock-up of how the complete and functional dashboard will look.
 On successful it opens to a default view of the list of categories the user has created {the last four}.
 There is a `View Recipes` link button under each of the diplayed categories which when clicked reveals
 all the recipes in that category.
@@ -35,8 +35,8 @@ The project is running parallel front end (static UI desing) and backend, as suc
 
 `$ python --version`
 `Python 3.6.2`
-If you have a lower version of Python please download the above version for your specific version 
-[here](https://www.python.org/downloads/release/python-362/) or alternatively a higher version 
+If you have a lower version of Python please download the above version for your specific version
+[here](https://www.python.org/downloads/release/python-362/) or alternatively a higher version
 [here](https://www.python.org/downloads/), if one exists at the time of review.
 2. *Virtual environment*
 
@@ -60,7 +60,7 @@ alternatively
 
 In an elevated `cmd` prompt or PowerShell instance, enter the following commands
 
-```cmd
+```bat
 #!c:\user\usr\
 
   > git clone -b dev https://github.com/indungu/yummy-recipes # Clone repo's dev branch

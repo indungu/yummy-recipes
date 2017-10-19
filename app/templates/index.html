@@ -7,9 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
         <title>Yummy Recipes</title>
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/css/lib/bootstrap.min.css">
         <!--Custom CSS-->
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../static/css/style.css">
         <!--Font Awesome CSS-->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     </head>
@@ -19,7 +19,7 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="#">Yummy Recipes</a>
+                <a class="navbar-brand" href="#">Yummy Recipes | Welcome</a>
                 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
@@ -27,10 +27,10 @@
                             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./signup.html">Sign Up</a>
+                            <a class="nav-link" href="{{url_for('signup')}}">Sign Up</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./login.html">Login</a>
+                            <a class="nav-link" href="{{url_for('login')}}">Login</a>
                         </li>
                     </ul>
                 </div>
@@ -49,13 +49,13 @@
                     <div class="col-md-3">
                         <div class="well">
                             <h3>New foodie?</h3>
-                            <a href="signup.html" class="btn btn-outline-primary btn-block">Sign Up</a>
+                            <a href="{{url_for('signup')}}" class="btn btn-outline-primary btn-block">Sign Up</a>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="well">
                             <h3>Returnig foodie,</h3>
-                            <a href="login.html" class="btn btn-outline-success btn-block">login</a>
+                            <a href="{{url_for('login')}}" class="btn btn-outline-success btn-block">login</a>
                         </div>
                     </div>
                 </div>
@@ -72,6 +72,6 @@
         <!-- jQuery first then Tether and finally Bootstrap -->
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script src="../static/js/lib/bootstrap.min.js"></script>
     </body>
 </html>
