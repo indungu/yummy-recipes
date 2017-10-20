@@ -22,17 +22,16 @@ class User(object):
 
     def get_user(self, email, password, user_list):
         """This method gets an existing user from the users's list"""
-        current_users = USERS.keys()
         # Get an existing user
         # First check whether user account exists
-        if email in current_users:
+        if email in USERS.keys():
             current_user = USERS[email]
             # confirm that correct password was entered
             if current_user["password"] == password:
-                return USERS[email]
+                return current_user
         # Get an instance user
-        elif email not in current_users:
-            if email in user_list.key():
+        else:
+            if email in user_list.keys():
                 instance_user = user_list[email]
                 if instance_user["email"] == email:
                     return user_list[email]
