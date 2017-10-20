@@ -23,5 +23,18 @@ class User(object):
         elif email in USERS.keys():
             return "Sorry, that email is already taken, choose a different one"
 
-    def get_user(self, email, password):
+    def get_user(self, email, password, user_list={}):
         """This method gets an existing user from the users's list"""
+        current_users = USERS.keys()
+        # Get an existing user
+        if email in current_users:
+            current_user = USERS[email]
+            if current_user["password"] == password:
+                return USERS[email]
+        # Get an instance user
+        elif email not in current_users:
+            if email in user_list.key():
+                instance_user = user_list[email]
+                if instance_user["email"] == email:
+                    return user_list[email]
+            return USERS
