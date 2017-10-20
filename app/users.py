@@ -1,8 +1,5 @@
 """This module manages the users"""
-USERS = {
-    "in@yummy.io": {"email": "in@yummy.io", "username": "indungu", "password": "pass2017"},
-    "cb@yummy.io": {"email": "cb@yummy.io", "username": "cbreezy", "password": "questions"}
-}
+USERS = {}
 
 class User(object):
     """This class manages the app users"""
@@ -27,8 +24,10 @@ class User(object):
         """This method gets an existing user from the users's list"""
         current_users = USERS.keys()
         # Get an existing user
+        # First check whether user account exists
         if email in current_users:
             current_user = USERS[email]
+            # confirm that correct password was entered
             if current_user["password"] == password:
                 return USERS[email]
         # Get an instance user
