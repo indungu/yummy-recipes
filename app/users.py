@@ -23,7 +23,7 @@ class User(object):
         elif email in USERS.keys():
             return "Sorry, that email is already taken, choose a different one"
 
-    def get_user(self, email, password, user_list={}):
+    def get_user(self, email, password, user_list):
         """This method gets an existing user from the users's list"""
         current_users = USERS.keys()
         # Get an existing user
