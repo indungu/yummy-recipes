@@ -9,3 +9,8 @@ install:
 # Test script(s)
 script:
   pytest
+
+# Notification config
+notifications:
+  email:
+    on_success: change
