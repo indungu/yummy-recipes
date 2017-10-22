@@ -68,15 +68,20 @@ In an elevated `cmd` prompt or PowerShell instance, enter the following commands
 #!c:\user\usr\
 
   > git clone -b dev https://github.com/indungu/yummy-recipes # Clone repo's dev branch
-  >. cd yummy-recipes  # Switch to working directory
+  > cd yummy-recipes  # Switch to working directory
   > virtualenv venv        # Install virtual environment
-  >.venv\Scripts\activate              # Activate virtualenv
+  > .\venv\Scripts\activate              # Activate virtualenv
   > pip install -r requirements.txt # Install package dependencies
   > pip install pytest                     # Install testing script
 ```
 
 ## To-Do
 
-I.  Add Create/Delete capability for recipes and recipe categories
-II. Improve aesthetic value of  the UI espectially for the welcome, signup and login pages
-III. Implement backend with Python Flask Microframework
+1. Add user account create
+
+2. Add user login
+
+3. Add recipe categories `CRUD` features.
+
+4. Add recipe `CRUD` features.
+
