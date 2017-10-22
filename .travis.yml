@@ -3,12 +3,13 @@ python:
   - "3.6"
 # Dependency intsall script
 install:
-  pip install -r requirements.txt
+  - pip install -r requirements.txt
+  - pip install -r test_requirements.txt
 # Test script
 script:
-  pytest --cov=app tests/
+  - pytest --cov=app tests/
 after_success:
-  coveralls
+  - coveralls
 # Notification config
 notifications:
   email:

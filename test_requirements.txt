@@ -1,0 +1,10 @@
+certifi==2017.7.27.1
+chardet==3.0.4
+coverage==4.0.3
+idna==2.6
+pytest==3.2.3
+pytest-cov==2.5.1
+python-coveralls==2.9.1
+PyYAML==3.12
+requests==2.18.4
+urllib3==1.22
