@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/indungu/yummy-recipes.svg?branch=master)](https://travis-ci.org/indungu/yummy-recipes)
 [![Coverage Status](https://coveralls.io/repos/github/indungu/yummy-recipes/badge.svg?branch=master)](https://coveralls.io/github/indungu/yummy-recipes?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ff319a6eb5843534abb1/maintainability)](https://codeclimate.com/github/indungu/yummy-recipes/maintainability)
 
 Yummy recipes provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
 
