@@ -21,6 +21,11 @@ class UserManagementTestCase(unittest.TestCase):
         """testing user is added successfully"""
         self.assertTrue(self.user_email in self.test_user.keys())
 
+    def test_user_duplication(self):
+        """Test when user attempts to create account with existing email"""
+        duplicate_user = self.new_user.add_user(self.user_email, "some_guy", "some_pass")
+        self.assertEqual(duplicate_user, "Sorry, that email is already registered.")
+
     def test_user_retrieval(self):
         """Testing the User get_user method"""
         new_user = self.test_user

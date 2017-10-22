@@ -14,11 +14,10 @@ class User(object):
         """This method adds a new user to the app"""
         current_users = USERS.keys()
         if email not in current_users:
-            new_user = {"email": email, "username": username, "password": password}
-            USERS[email] = new_user
+            USERS[email] = {"email": email, "username": username, "password": password}
             return USERS
         elif email in USERS.keys():
-            return "Sorry, that email is already taken, choose a different one"
+            return "Sorry, that email is already registered."
 
     def get_user(self, email, password, user_list):
         """This method gets an existing user from the users's list"""
