@@ -18,7 +18,7 @@ class UserManagementTestCase(unittest.TestCase):
         self.test_user = self.new_user.add_user(self.user_email, self.username, self.password)
 
     def test_user_creation(self):
-        """testing user is added successfully"""
+        """Testing user is added successfully"""
         self.assertTrue(self.user_email in self.test_user.keys())
 
     def test_user_duplication(self):
@@ -28,6 +28,5 @@ class UserManagementTestCase(unittest.TestCase):
 
     def test_user_retrieval(self):
         """Testing the User get_user method"""
-        new_user = self.test_user
-        retrieved_user = self.new_user.get_user(self.user_email, self.password, new_user)
+        retrieved_user = self.new_user.get_user(self.user_email, self.password)
         self.assertEqual(self.user_email, retrieved_user["email"])

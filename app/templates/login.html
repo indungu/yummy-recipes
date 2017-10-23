@@ -23,16 +23,17 @@
         </div>
     </nav>
 </header>
-<form class="container form" action="{{url_for('dashboard')}}">
+{% from "_formhelper.html" import render_field %}
+<form class="container form" action="/login">
     <div class="form-group">
-        <label for="enterEmail" class="text-white">Email Address</label>
-        <input type="email" class="form-control" id="enterEmail" placeholder="Enter email address">
+        {{ form.email.label(class="text-white") }}
+        {{ form.email(class="form-control") }}
     </div>
     <div class="form-group">
-            <label for="enterPassword" class="text-white">Password</label>
-            <input type="password" class="form-control" id="enterPassword" placeholder="Enter password">
+        {{ form.password.label(class="text-white") }}
+        {{ form.password(class="form-control") }}
     </div>
-    <button class="btn btn-primary" type="submit" aria-describedby="termsofUse">Login</button>
+    {{ form.login(class="btn btn-primary") }}
     <br/>
     <small class="form-text text-muted">Need an account? <a href="{{url_for('signup')}}">Sign Up</a>.</small>
 </form>
