@@ -28,7 +28,7 @@ class LoginForm(FlaskForm):
         validators.data_required(),
         validators.email(message="Invalid email address")
     ])
-    password = PasswordField('New Password', [
+    password = PasswordField('Password', [
         validators.DataRequired()
     ])
     login = SubmitField("Login")
