@@ -5,9 +5,12 @@ name = "pypi"
 
 [packages]
 flask = "*"
+flask-wtf = "*"
 
 [dev-packages]
 pylint = "*"
+pytest-cov = "*"
+pytest-coveralls = "*"
 
 [requires]
 python_version = "3.6"

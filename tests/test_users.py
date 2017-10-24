@@ -10,23 +10,28 @@ class UserManagementTestCase(unittest.TestCase):
 
     def setUp(self):
         """Set up test"""
-        self.new_user = User()
+        self.user = User()
         self.current_users = USERS
         self.user_email = "fn@yummy.io"
         self.username = "fena"
         self.password = "fenamenal"
-        self.test_user = self.new_user.add_user(self.user_email, self.username, self.password)
 
     def test_user_creation(self):
         """Testing user is added successfully"""
-        self.assertTrue(self.user_email in self.test_user.keys())
+        test_user = self.user.add_user(self.user_email, self.username, self.password)
+        self.assertEqual(test_user, "User added successfully.")
 
     def test_user_duplication(self):
         """Test when user attempts to create account with existing email"""
-        duplicate_user = self.new_user.add_user(self.user_email, "some_guy", "some_pass")
+        duplicate_user = self.user.add_user(self.user_email, "some_guy", "some_pass")
         self.assertEqual(duplicate_user, "Sorry, that email is already registered.")
 
     def test_user_retrieval(self):
         """Testing the User get_user method"""
-        retrieved_user = self.new_user.get_user(self.user_email, self.password)
+        retrieved_user = self.user.get_user(self.user_email, self.password)
         self.assertEqual(self.user_email, retrieved_user["email"])
+
+    def test_non_existent_user(self):
+        """Testing user retrival for a user that doesn't exist"""
+        retrieved_user = self.user.get_user("user@email.me", self.password)
+        self.assertEqual(retrieved_user, "User not found!")

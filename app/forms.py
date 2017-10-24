@@ -24,14 +24,10 @@ class SignupForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     """The signup form"""
-    email = StringField(
-        'Email Address',
-        [
-            validators.data_required(),
-            validators.Length(min=6, max=35),
-            validators.email(message="Invalid email address")
-        ]
-    )
+    email = StringField('Email Address', [
+        validators.data_required(),
+        validators.email(message="Invalid email address")
+    ])
     password = PasswordField('New Password', [
         validators.DataRequired()
     ])
