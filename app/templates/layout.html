@@ -5,7 +5,9 @@
         <!-- Required meta tags -->
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
-        <title>Yummy Recipes</title>
+        <title>Yummy Recipes | {{ title }}</title>
+        
+        <script src="{{url_for('static', filename='js/lib/ckeditor/ckeditor.js')}}"></script>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="{{url_for('static', filename='css/lib/bootstrap.min.css')}}">
         <!--Custom CSS-->
@@ -15,10 +17,13 @@
     </head>
     <body class="mainBg">
         {% with messages = get_flashed_messages() %}
-            {% if message %}
+            {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-warning alert-dismissable" role="alert">
+                    <div class="alert alert-info alert-dismissable" role="alert" style="margin-bottom: 0 !important">
                         {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -32,7 +37,7 @@
         </footer>
 
         <!-- jQuery first then Tether and finally Bootstrap -->
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="{{url_for('static', filename='js/lib/jquery-3.2.1.slim.min.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
         <script src="{{url_for('static', filename='js/lib/bootstrap.min.js')}}"></script>
         <script src="{{url_for('static', filename='js/script.js')}}"></script>

@@ -1,12 +1,21 @@
 """Routes testing suite."""
 
 from unittest import TestCase
+from flask import session
 
 from app import APP
 from app.users import User
 
 class RoutesTestCase(TestCase):
     """This class contains all the test methods used for testing"""
+
+    def setUp(self):
+        """set up for each test"""
+        self.test_app = APP.test_client()
+        self.user_email = "in@user.me"
+        self.username = "user"
+        self.user_password = "password"
+        self.user = User()
 
     def login(self, email, password):
         """This method creates a login session"""
@@ -18,15 +27,6 @@ class RoutesTestCase(TestCase):
     def logout(self):
         """This helper method clears a login session"""
         return self.test_app.get('/logout', follow_redirects=True)
-
-
-    def setUp(self):
-        """set up for each test"""
-        self.test_app = APP.test_client()
-        self.user_email = "in@user.me"
-        self.username = "user"
-        self.user_password = "password"
-        self.user = User()
 
     def test_root_route(self):
         """Tests whether the root url opens"""

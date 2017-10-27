@@ -29,21 +29,23 @@ def is_authorized(function):
 @APP.route('/')
 def index():
     """Index view route"""
-    flash('Welcome!')
-    return render_template('index.html')
+    title = "Welcome"
+    return render_template('index.html', title=title)
 
 @APP.route('/signup', methods=['GET', 'POST'])
 def signup():
     """signup view route"""
+    title = "Sign Up"
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         USER.add_user(form.email.data, form.username.data, form.password.data)
         return redirect(url_for('login'))
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', title=title, form=form)
 
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
     """login view route"""
+    title = "Login"
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = USER.get_user(form.email.data, form.password.data)
@@ -53,7 +55,7 @@ def login():
             session["logged_in"] = True
             return redirect(url_for('dashboard'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', title=title, form=form)
 
 @APP.route('/logout/')
 @is_authorized
@@ -67,5 +69,6 @@ def logout():
 @is_authorized
 def dashboard():
     """route to dashboard view"""
+    title = "Dashboard"
     flash('Welcome, you were successfully logged in')
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', title=title)
