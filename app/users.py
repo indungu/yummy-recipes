@@ -14,10 +14,10 @@ class User(object):
         """This method adds a new user to the app"""
         if email not in USERS:
             USERS[email] = {"email": email, "username": username, "password": password}
-            return USERS
+            return "User added successfully."
         return "Sorry, that email is already registered."
 
-    def get_user(self, email=None, password=None, user_list=None):
+    def get_user(self, email=None, password=None):
         """This method gets an existing user from the users's list"""
         # Get an existing user
         # First check whether user account exists
@@ -26,10 +26,4 @@ class User(object):
             # confirm that correct password was entered
             if current_user["password"] == password:
                 return current_user
-        # Get an instance user
-        else:
-            if email in user_list.keys():
-                instance_user = user_list[email]
-                if instance_user["email"] == email:
-                    return user_list[email]
-            return "user not found"
+        return "User not found!"

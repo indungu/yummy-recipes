@@ -2,5 +2,5 @@ venv/
 __pycache__/
 .vscode/
 *.pyc
-.cache/*
-.coverage
+.cache/
+ckeditor/

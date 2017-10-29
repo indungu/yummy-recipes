@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block content %}
+{% block body %}
 <header class="navbar navbar-toggleable-md navbar-light bg-primary bg-faded">
     <nav class="container w-100">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,16 +24,15 @@
     </nav>
 </header>
 {% from "_formhelper.html" import render_field %}
-<form class="container form" action="/login">
+<form class="container form" action="/login" method="post">
+    {{ form.hidden_tag() }}
     <div class="form-group">
-        {{ form.email.label(class="text-white") }}
-        {{ form.email(class="form-control") }}
+        {{ render_field(form.email, class="form-control", placeholder="Email") }}
     </div>
     <div class="form-group">
-        {{ form.password.label(class="text-white") }}
-        {{ form.password(class="form-control") }}
+        {{ render_field(form.password, class="form-control", placeholder="Password") }}
     </div>
-    {{ form.login(class="btn btn-primary") }}
+        {{ form.login(class="btn btn-primary") }}
     <br/>
     <small class="form-text text-muted">Need an account? <a href="{{url_for('signup')}}">Sign Up</a>.</small>
 </form>

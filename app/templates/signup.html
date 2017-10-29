@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block body %}
 <header class="navbar navbar-toggleable-md navbar-light bg-primary bg-faded">
     <nav class="container w-100">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,20 +26,16 @@
 <form class="container form" action="/signup" method="post">
     {{ form.hidden_tag() }}
     <div class="form-group">
-        {{ form.email.label(class="text-white") }}
-        {{ form.email(class="form-control") }}
+        {{ render_field(form.email, class="form-control", placeholder="Enter valid email address") }}
     </div>
     <div class="form-group">
-        {{ form.username.label(class="text-white") }}
-        {{ form.username(class="form-control") }}
+        {{ render_field(form.username, class="form-control", placeholder="Enter username") }}
     </div>
     <div class="form-group">
-        {{ form.password.label(class="text-white") }}
-        {{ form.password(class="form-control") }}
+        {{ render_field(form.password, class="form-control", placeholder="Enter password") }}
     </div>                
     <div class="form-group">
-        {{ form.confirm.label(class="text-white") }}
-        {{ form.confirm(class="form-control") }}
+        {{ render_field(form.confirm, class="form-control", placeholder="Confirm password") }}
     </div>
     {{ form.submit(class="btn btn-primary") }}
     <small id="termsofUse" class="form-text text-muted">By Signing Up you expressly agree to our <a href="#">Terms and Conditions</a>.</small>

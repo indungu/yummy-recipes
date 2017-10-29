@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
-{% block content %}
+{% block body %}
 <header class="navbar navbar-toggleable-md navbar-light bg-primary bg-faded">
     <nav class="container w-100">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Yummy Recipes</a>
+        <a class="navbar-brand" href="{{url_for('index')}}">Yummy Recipes</a>
         
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -14,10 +14,10 @@
                     <a class="nav-link" href="#">View Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">New Category</a>
+                    <a class="nav-link" href="#newRecipeModal" data-toggle="modal" data-target="#newRecipeModal">New Category</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('login')}}">Logout</a>
+                    <a class="nav-link" href="/logout">Logout</a>
                 </li>
             </ul>
         </div>
@@ -36,154 +36,95 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <div class="list-group">
-                    <a class="list-group-item list-group-item-action active">View Categories</a>
-                    <a href="#" class="list-group-item list-group-item-action">Create Category</a>
-                    <a href="#" class="list-group-item list-group-item-action">Add Recipe</a>
-                </div>
+                <ul class="list-group" style="margin-bottom: 10px">
+                    <button type="button" class="list-group-item list-group-item-action">View Categories</button>
+                    <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#categoryModal">
+                        Add Category
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#newRecipeModal">
+                        Add recipe
+                    </button>
+                </ul>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" style="margin-bottom: 70px">
                 <div class="card text-center">
                     <div class="card-header">
                         Categories
                     </div>
                     <div class="row card-block">
+                        {% for category in categories %}
                         <div class="col-md-3">
                             <div class="well">
-                                <h4 class="card-title">Pies</h4>
-                                <p class="card-text">All my baking recipes.</p>
-                                <a data-toggle="collapse" href="#collapsePies" class="btn btn-primary" aria-expanded="true" aria-controls="collapsePies">View Recipes</a>
+                                <h4 class="card-title">{{category}}</h4>
+                                <p class="card-text">{{categories[category]['description']}}</p>
+                                <a data-toggle="collapse" href="#collapse{{category}}" class="btn btn-primary" aria-expanded="true" aria-controls="collapse{{category}}">View Recipes</a>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="well">
-                                <h4 class="card-title">Cookies</h4>
-                                <p class="card-text">All my baking recipes.</p>
-                                <a href="#" class="btn btn-primary">View Recipes</a>
-                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recipes -->
+                {% for category in categories %}
+                <div class="collapse" id="collapse{{category}}">
+                    <div class="card" style="margin-top: 10px">
+                        <div class="card-header">
+                            {{category}}
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#newRecipeModal">Add Recipe</button>
                         </div>
-                        <div class="col-md-3">
-                            <div class="well">
-                                <h4 class="card-title">Chicken</h4>
-                                <p class="card-text">All my baking recipes.</p>
-                                <a href="#" class="btn btn-primary">View Recipes</a>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="well">
-                                <h4 class="card-title">Rice</h4>
-                                <p class="card-text">All my baking recipes.</p>
-                                <a href="#" class="btn btn-primary" >View Recipes</a>
+                        <div class="card-block">
+                            <div id="accordion" role="tablist" aria-multiselectable="true">
+                                
+                                {% for recipe in categories[category]['recipes'] %}
+                                <div class="card" style="margin-bottom: 5px">
+                                    <div class="card-header" role="tab" id="recipeOne">
+                                        <h5 class="mb-0">
+                                            {{categories[category]['recipes'][recipe]['name']}}
+                                        </h5>
+                                    </div>
+                                    <div class="card-block">
+                                        <h6>Fun Fact</h6>
+                                        <p>{{categories[category]['recipes'][recipe]['fun_fact']}}</p>
+                                        <h6>Ingredients</h6>
+                                        <p>{{categories[category]['recipes'][recipe]['ingredients']}}</p>
+                                        <h6>Directions and Serving</h6>
+                                        <p>{{categories[category]['recipes'][recipe]['directions']}}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
+                                        <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
+                                    </div>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Pie Recipes -->
-                <div class="collapse" id="collapsePies">
-                    <div class="card" style="margin-top: 10px">
-                    <div class="card-header">
-                        Pies
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#newRecipeModal">Add Recipe</button>
-                    </div>
-                    <div class="card-block">
-                        <div id="accordion" role="tablist" aria-multiselectable="true">
-                            <div class="card">
-                                <div class="card-header" role="tab" id="recipeOne">
-                                    <h5 class="mb-0">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Cherry-Cream Pie
-                                        </a>
-                                    </h5>
-                                </div>
-                            
-                                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="recipeOne">
-                                <div class="card-block">
-                                    <h6>Fun Fact</h6>
-                                    <p>Here is something interesting you need to know about this recipe</p>
-                                    <h6>Ingredients</h6>
-                                    <p>You will need the following</p>
-                                    <ol>
-                                        <li>3 Eggs</li>
-                                        <li>1 Cup of baking sugar</li>
-                                        <li>2 Farm fresh cherries</li>
-                                        <li>3 cups of all purpose baking floor</li>
-                                        <li>A lot of love</li>
-                                    </ol>
-                                    <h6>Directions and Serving</h6>
-                                    <p>Let's bake us some pie!!</p>
-                                    <p> First... Check out my favorite recipe <a href="https://www.tasteofhome.com/recipes/cherry-cream--pie">here</a>!</p>
-                                </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
-                                    <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
+                {% endfor %}
+                <!-- Category modal -->
+                <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="categoryModalLabel">Add Recipe Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% from "_formhelper.html" import render_field %}
+                        <form action="/dashboard" method="POST">
+                            {{ form.hidden_tag() }}
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    {{ render_field(form.name, class="form-control", placeholder="Category name") }}
+                                    {{ render_field(form.description, class="form-control", placeholder="A slight description") }}
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-header" role="tab" id="recipeTwo">
-                                    <h5 class="mb-0">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Pot Pie
-                                        </a>
-                                    </h5>
-                                </div>
-                            
-                                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="recipeTwo">
-                                <div class="card-block">
-                                    <h6>Fun Fact</h6>
-                                    <p>Here is something interesting you need to know about this recipe</p>
-                                    <h6>Ingredients</h6>
-                                    <p>You will need the following</p>
-                                    <ol>
-                                        <li>3 Eggs</li>
-                                        <li>1 Cup of baking sugar</li>
-                                        <li>2 Farm fresh cherries</li>
-                                        <li>3 cups of all purpose baking floor</li>
-                                        <li>A lot of love</li>
-                                    </ol>
-                                    <h6>Directions and Serving</h6>
-                                    <p>Let's bake us some pie!!</p>
-                                    <p> First... Check out my favorite recipe <a href="https://www.pillsbury.com/recipes/classic-chicken-pot-pie/1401d418-ac0b-4b50-ad09-c6f1243fb992">here</a>!</p>
-                                </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
-                                    <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
-                                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Add Category</button>
                             </div>
-                            <div class="card">
-                                <div class="card-header" role="tab" id="recipeThree">
-                                    <h5 class="mb-0">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Apple Pie
-                                        </a>
-                                    </h5>
-                                </div>
-                            
-                                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="recipeThree">
-                                <div class="card-block">
-                                    <h6>Fun Fact</h6>
-                                    <p>Here is something interesting you need to know about this recipe</p>
-                                    <h6>Ingredients</h6>
-                                    <p>You will need the following</p>
-                                    <ol>
-                                        <li>3 Eggs</li>
-                                        <li>1 Cup of baking sugar</li>
-                                        <li>2 Farm fresh cherries</li>
-                                        <li>3 cups of all purpose baking floor</li>
-                                        <li>A lot of love</li>
-                                    </ol>
-                                    <h6>Directions and Serving</h6>
-                                    <p>Let's bake us some pie!!</p>
-                                    <p> First... Check out my favorite recipe <a href="https://www.tasteofhome.com/recipes/apple-pie">here</a>!</p>
-                                </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
-                                    <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
-                                </div>
-                            </div>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -192,7 +133,9 @@
                 <div class="modal fade" id="newRecipeModal" tabindex="-1" role="dialog" aria-labelledby="newRecipeModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <form action="">
+                            {% from "_formhelper.html" import render_field %}
+                            <form action="/add_recipe" method="POST">
+                                {{form_rec.hidden_tag()}}
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">New Recipe</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -201,29 +144,30 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="funFact">Fun Fact</label>
-                                        <input type="text" class="form-control" id="funfact" placeholder="Tell us something fun about this recipe">
+                                        {{render_field(form_rec.category, class='form-control', placeholder='Category name')}}
                                     </div>
                                     <div class="form-group">
-                                        <label for="ingredientList">Ingredients</label>
-                                        <textarea class="form-control" name="ingredientEditor" id="inderientsList" placeholder="What ingredients do I need?"></textarea>
+                                        {{render_field(form_rec.name, class='form-control', placeholder='Name of the recipe')}}
                                     </div>
                                     <div class="form-group">
-                                        <label for="prepDirections">Directions and Serving</label>
-                                        <textarea class="form-control" name="directionsEditor" id="prepDirections" placeholder="How do I prepare it?"></textarea>
+                                        {{render_field(form_rec.fun_fact, class='form-control', placeholder='Tell us something fun about this recipe')}}
+                                    </div>
+                                    <div class="form-group">
+                                        {{render_field(form_rec.ingredients, class='form-control', placeholder='What ingredients are need?')}}                                   
+                                    </div>
+                                    <div class="form-group">
+                                        {{render_field(form_rec.description, class='form-control', placeholder='How to prepare and serve')}}
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" onclick="underConstruction()">Add Recipe</button>
+                                    <button type="submit" class="btn btn-primary">Add Recipe</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                
             </div>
-            
         </div>
     </div>
 </section>
