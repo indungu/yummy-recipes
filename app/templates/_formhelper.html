@@ -1,10 +1,10 @@
 {% macro render_field(field) %}
-<dt>{{ field.label(class="text-white") }}
+<dt>{{ field.label(class="text-primary") }}
 <dd>{{ field(**kwargs)|safe }}
 {% if field.errors %}
   <ul class="form-text text-muted text-red">
   {% for error in field.errors %}
-    <small><li>{{ error }}</li></small>
+    <small class="text-danger">{{ error }}</small>
   {% endfor %}
   </ul>
 {% endif %}

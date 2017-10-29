@@ -11,6 +11,8 @@ class RoutesTestCase(TestCase):
 
     def setUp(self):
         """set up for each test"""
+        APP.config['TESTING'] = True
+        APP.config['WTF_CSRF_ENABLED'] = False
         self.test_app = APP.test_client()
         self.user_email = "in@user.me"
         self.username = "user"
@@ -42,7 +44,7 @@ class RoutesTestCase(TestCase):
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_user_login(self):
+    def test_user_login_route(self):
         """Test if the login route/url opens"""
         response = self.test_app.get('/login')
         self.assertEqual(response.status_code, 200)
@@ -51,12 +53,6 @@ class RoutesTestCase(TestCase):
         """When user is not authorized"""
         response = self.test_app.get('/dashboard')
         self.assertEqual(response.status_code, 302)
-
-    def test_dashboard_route_with_login(self):
-        """When user is authorized"""
-        self.user.add_user(self.user_email, self.username, self.user_password)
-        response = self.login(self.user_email, self.user_password)
-        self.assertEqual(response.status_code, 200)
 
     def test_invalid_routes(self):
         """Test if invalid routes are flagged"""

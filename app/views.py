@@ -1,13 +1,15 @@
 """Views module"""
-
 from functools import wraps
 from flask import render_template, request, redirect, url_for, flash, session
 
 from app import APP
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, CategoryForm, RecipeForm
 from .users import User
+from .recipes import CATEGORIES, Categories, Recipes
 
 USER = User()
+CATEGORY = Categories()
+RECIPE = Recipes()
 
 APP.secret_key = "Myl1TtL34cr3t"
 
@@ -54,7 +56,6 @@ def login():
         elif user["email"] == form.email.data:
             session["logged_in"] = True
             return redirect(url_for('dashboard'))
-
     return render_template('login.html', title=title, form=form)
 
 @APP.route('/logout/')
@@ -65,10 +66,35 @@ def logout():
     flash('You were logged out successfully')
     return redirect(url_for('login'))
 
-@APP.route('/dashboard')
+@APP.route('/dashboard', methods=['GET', 'POST'])
 @is_authorized
 def dashboard():
     """route to dashboard view"""
     title = "Dashboard"
-    flash('Welcome, you were successfully logged in')
-    return render_template('dashboard.html', title=title)
+    form = CategoryForm()
+    form_rec = RecipeForm()
+    if request.method == 'POST' and form.validate():
+        CATEGORY.add_category(form.name.data, form.description.data)
+        return redirect(url_for('dashboard'))
+    return render_template('dashboard.html',
+                           title=title,
+                           form=form,
+                           form_rec=form_rec,
+                           categories=CATEGORIES
+                          )
+
+@APP.route('/add_recipe', methods=['POST'])
+@is_authorized
+def add_recipe():
+    """Adds a new recipe and redirects to dash"""
+    form_rec = RecipeForm()
+    if request.method == 'POST' and form_rec.validate():
+        recipe = {
+            'name': form_rec.name.data,
+            'fun_fact': form_rec.fun_fact.data,
+            'ingredients': form_rec.ingredients.data,
+            'directions': form_rec.description.data
+        }
+        confirmation = RECIPE.add_recipe(form_rec.category.data, recipe)
+        flash(confirmation)
+        return redirect(url_for('dashboard'))
