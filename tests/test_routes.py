@@ -1,7 +1,6 @@
 """Routes testing suite."""
 
 from unittest import TestCase
-from flask import session
 
 from app import APP
 from app.users import User
@@ -19,8 +18,26 @@ class RoutesTestCase(TestCase):
         self.user_password = "password"
         self.user = User()
 
-    def login(self, email, password):
+    def tearDown(self):
+        """The following is done at the end of each test"""
+        self.logout()
+
+    def signup(self):
+        """This is the signup helper method"""
+        return self.test_app.post('/signup', data=dict(
+            email=self.user_email,
+            username=self.username,
+            password=self.user_password,
+            confirm=self.user_password
+        ), follow_redirects=True)
+
+    def login(self, email=None, password=None):
         """This method creates a login session"""
+        if (email is None) and (password is None):
+            return self.test_app.post('/login', data=dict(
+                email=self.user_email,
+                password=self.user_password
+            ), follow_redirects=True)
         return self.test_app.post('/login', data=dict(
             email=email,
             password=password
@@ -28,31 +45,116 @@ class RoutesTestCase(TestCase):
 
     def logout(self):
         """This helper method clears a login session"""
-        return self.test_app.get('/logout', follow_redirects=True)
+        return self.test_app.get('/logout/', follow_redirects=True)
 
+    def add_category(self):
+        """This helper method adds a test category"""
+        return self.test_app.post('/dashboard', data=dict(
+            name='Pies',
+            description='Classic American pies'
+        ), follow_redirects=True)
+
+    def add_recipe(self):
+        """This helper method adds a test recipe"""
+        return self.test_app.post('/add_recipe', data=dict(
+            category='Pies',
+            name='Apple Pie',
+            fun_fact='Pilgrims thanksgiving gift to the Native Americans',
+            ingredients='Some of this\nSome of that',
+            description='Do this\nThen that\nThen the other\nPrepare with care, serve with love'
+        ), follow_redirects=True)
+
+    # Ensure that welcome page loads on the root route
     def test_root_route(self):
         """Tests whether the root url opens"""
         reponse = self.test_app.get('/')
         self.assertEqual(reponse.status_code, 200)
+        self.assertIn(b'Welcome foodie', reponse.data)
 
     def test_signup_route(self):
         """Test if the signup route/url opens"""
         response = self.test_app.get('/signup')
-        self.assertEqual(response.status_code, 200)
-        response = self.test_app.post('/signup', data=dict(
-            email=self.user_email, username=self.username, password=self.user_password
-        ), follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Yummy Recipes | Sign Up', response.data)
+        response = self.signup()
+        self.assertIn(b'Yummy Recipes | Login', response.data)
 
-    def test_user_login_route(self):
+    def test_ogin_route(self):
         """Test if the login route/url opens"""
-        response = self.test_app.get('/login')
+        # Ensure user can navigate to login page
+        response = self.test_app.get('/login', content_type='html/text')
         self.assertEqual(response.status_code, 200)
+        # Ensure user can login with valid credentials
+        self.signup()
+        response = self.login()
+        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
+        # Ensure user can't loggin with invalid credentials
+        response = self.login('some@email.com', 'somepass')
+        self.assertIn(b'Invalid user!', response.data)
 
-    def test_dashboard_route_without_login(self):
+    def test_logout_route(self):
+        """Test that user can logout"""
+        self.signup()
+        self.login()
+        # Ensure that logged in user is succesfully logged out
+        response = self.logout()
+        self.assertIn(b'You were logged out successfully', response.data)
+
+    def test_dashboard_route(self):
         """When user is not authorized"""
+        # Ensure user is redirected to login view if they don't have an active session
         response = self.test_app.get('/dashboard')
         self.assertEqual(response.status_code, 302)
+        # Ensure that user can access dashboard upon login
+        self.signup()
+        response = self.login()
+        self.assertIn(
+            b'Dashboard\n',
+            response.data
+        )
+        # Ensure that a user can add a new category
+        response = self.add_category()
+        self.assertIn(b'Pies', response.data)
+
+    def test_add_recipe_route(self):
+        """Tests for the add recipe route"""
+        self.signup()
+        self.login()
+        # Ensure that explicit entry of this URL in browser redirects to dashboard
+        # whilst user is in session
+        response = self.test_app.get('/add_recipe', follow_redirects=True)
+        self.assertIn(b'Dashboard\n', response.data)
+        # Ensure that user can only add a recipe to existing category
+        response = self.add_recipe()
+        self.assertIn(b'Category does not exist.', response.data)
+        # Create/add test category
+        self.add_category()
+        response = self.add_recipe()
+        self.assertIn(b'Recipe added successfully.', response.data)
+
+    def test_edit_category_route(self):
+        """Tests for the edit category route"""
+        self.signup()
+        self.login()
+        self.add_category()
+        # Ensure that the edit category view loads
+        response = self.test_app.get('/edit_category/Pies', follow_redirects=True)
+        self.assertIn(b'Edit Pies Category', response.data)
+        # Ensure that incorrect categories are flagged
+        response = self.test_app.get('/edit_category/Cookies', follow_redirects=True)
+        self.assertIn(b'Category does not exist.', response.data)
+        # Ensure that exiting category can be updated
+        response = self.test_app.post('/edit_category/Pies', data=dict(
+            name='Pies',
+            description='Good old pie recipes'
+        ), follow_redirects=True)
+        self.assertIn(b'Good old pie recipes', response.data)
+        # Ensure that exiting category name can't be updated
+        response = self.test_app.post('/edit_category/Pies', data=dict(
+            name='Cookies',
+            description='Good old cookie recipes'
+        ), follow_redirects=True)
+        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
+        self.assertIn(b'Sorry, Category does not exist.', response.data)
 
     def test_invalid_routes(self):
         """Test if invalid routes are flagged"""

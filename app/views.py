@@ -1,4 +1,5 @@
 """Views module"""
+import sys
 from functools import wraps
 from flask import render_template, request, redirect, url_for, flash, session
 
@@ -52,6 +53,7 @@ def login():
     if request.method == 'POST' and form.validate():
         user = USER.get_user(form.email.data, form.password.data)
         if user == "User not found!":
+            flash('Invalid user!')
             return redirect(url_for('login'))
         elif user["email"] == form.email.data:
             session["logged_in"] = True
@@ -83,7 +85,7 @@ def dashboard():
                            categories=CATEGORIES
                           )
 
-@APP.route('/add_recipe', methods=['POST'])
+@APP.route('/add_recipe', methods=['GET', 'POST'])
 @is_authorized
 def add_recipe():
     """Adds a new recipe and redirects to dash"""
@@ -97,4 +99,27 @@ def add_recipe():
         }
         confirmation = RECIPE.add_recipe(form_rec.category.data, recipe)
         flash(confirmation)
+        return redirect(url_for('dashboard'))
+    return redirect(url_for('dashboard'))
+
+@APP.route('/edit_category/<name>', methods=['GET', 'POST'])
+@is_authorized
+def edit_category(name):
+    """Handles the category edit"""
+    form = CategoryForm()
+    if request.method == 'GET':
+        category = CATEGORY.get_category(name)
+        if category == 'Category does not exist.':
+            flash(category)
+            return redirect(url_for('dashboard'))
+        form.name.data = category['name']
+        form.description.data = category['description']
+        return render_template('edit_category.html', form=form)
+    if form.validate():
+        mod_category = CATEGORY.set_category(form.name.data, form.description.data)
+        print(mod_category, file=sys.stdout)
+        if mod_category == 'Category does not exist.':
+            flash('Sorry, Category does not exist.')
+            return redirect(url_for('dashboard'))
+        flash('Category updated successfully')
         return redirect(url_for('dashboard'))
