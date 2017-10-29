@@ -55,6 +55,10 @@
                         {% for category in categories %}
                         <div class="col-md-3">
                             <div class="well">
+                                <div class="well" style="margin: 5px">
+                                    <a href="/edit_category/{{category}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <a href="/delete_category/{{category}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                </div>
                                 <h4 class="card-title">{{category}}</h4>
                                 <p class="card-text">{{categories[category]['description']}}</p>
                                 <a data-toggle="collapse" href="#collapse{{category}}" class="btn btn-primary" aria-expanded="true" aria-controls="collapse{{category}}">View Recipes</a>
@@ -91,8 +95,8 @@
                                         <p>{{categories[category]['recipes'][recipe]['directions']}}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()">Edit Recipe</button>
-                                        <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()">Delete Recipe</button>
+                                        <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</button>
+                                        <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</button>
                                     </div>
                                 </div>
                                 {% endfor %}

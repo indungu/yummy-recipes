@@ -48,7 +48,7 @@ class CategoriesTestCase(TestCase):
         added_category = CATEGORY.add_category('cookies', 'my cookie recipes')
         self.assertTrue(added_category['name'] in CATEGORIES)
         updated_category = CATEGORY.set_category(
-            'cookies', 'my favourite cookie recipes', [{'name': 'chocolate chip'}]
+            'cookies', 'my favourite cookie recipes'
         )
         self.assertEqual(CATEGORIES['cookies'], updated_category)
 

@@ -31,10 +31,12 @@ class Categories(object):
             return CATEGORIES[name]
         return "Category does not exist."
 
-    def set_category(self, name, description=None, recipes=None):
+    def set_category(self, name, description=None):
         """Returns the updated category or error message"""
         if name in CATEGORIES:
-            CATEGORIES[name] = {"name": name, "description": description, "recipes": recipes}
+            CATEGORIES[name] = {
+                "name": name, "description": description, 'recipes': CATEGORIES[name]['recipes']
+            }
             return CATEGORIES[name]
         return "Category does not exist."
 
