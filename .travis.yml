@@ -8,7 +8,7 @@ install:
 script:
   - pytest --cov-report term-missing --cov=app tests/
 after_success:
-  - coveralls
+  - coveralls --ignore-errors
 # Notification config
 notifications:
   email:
