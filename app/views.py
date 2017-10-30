@@ -92,10 +92,10 @@ def add_recipe():
     form_rec = RecipeForm()
     if request.method == 'POST' and form_rec.validate():
         recipe = {
-            'name': form_rec.name.data,
+            'name': '_'.join(form_rec.name.data.split()),
             'fun_fact': form_rec.fun_fact.data,
             'ingredients': form_rec.ingredients.data,
-            'directions': form_rec.description.data
+            'description': form_rec.description.data
         }
         confirmation = RECIPE.add_recipe(form_rec.category.data, recipe)
         flash(confirmation)
@@ -116,10 +116,66 @@ def edit_category(name):
         form.description.data = category['description']
         return render_template('edit_category.html', form=form)
     if form.validate():
-        mod_category = CATEGORY.set_category(form.name.data, form.description.data)
-        print(mod_category, file=sys.stdout)
-        if mod_category == 'Category does not exist.':
+        mod_recipe = CATEGORY.set_category(form.name.data, form.description.data)
+        print(mod_recipe, file=sys.stdout)
+        if mod_recipe == 'Category does not exist.':
             flash('Sorry, Category does not exist.')
             return redirect(url_for('dashboard'))
         flash('Category updated successfully')
         return redirect(url_for('dashboard'))
+
+@APP.route('/delete_category/<name>')
+@is_authorized
+def delete_category(name):
+    """This handles the delete feature for categories"""
+    category = CATEGORY.get_category(name)
+    if category == 'Category does not exist.':
+        flash('Sorry, category '+name+' does not exist.')
+        return redirect(url_for('dashboard'))
+    removed = CATEGORIES.pop(name)
+    print(removed, file=sys.stdout)
+    flash('Category '+name+' was removed successfully.')
+    return redirect(url_for('dashboard'))
+
+@APP.route('/edit_recipe/<category>/<name>', methods=['GET', 'POST'])
+@is_authorized
+def edit_recipe(category, name):
+    """Handles the category edit"""
+    form = RecipeForm()
+    if request.method == 'GET':
+        recipe = RECIPE.get_recipe(category, name)
+        if recipe == 'Recipe does not exist':
+            flash(recipe)
+            return redirect(url_for('dashboard'))
+        form.category.data = category
+        form.name.data = CATEGORIES[category]['recipes'][name]['name']
+        form.fun_fact.data = CATEGORIES[category]['recipes'][name]['fun_fact']
+        form.ingredients.data = CATEGORIES[category]['recipes'][name]['ingredients']
+        form.description.data = CATEGORIES[category]['recipes'][name]['description']
+        return render_template('edit_recipe.html', form=form)
+    if form.validate():
+        mod_recipe = RECIPE.set_recipe(form.category.data, name, {
+            'name': form.name.data,
+            'fun_fact': form.fun_fact.data,
+            'ingredients': form.ingredients.data,
+            'description': form.description.data
+        })
+        print(mod_recipe, file=sys.stdout)
+        if mod_recipe == 'Recipe does not exist':
+            flash('Sorry, recipe does not exist.')
+            return redirect(url_for('dashboard'))
+        flash('Recipe updated successfully.')
+        return redirect(url_for('dashboard'))
+
+@APP.route('/delete_recipe/<category>/<name>')
+@is_authorized
+def delete_recipe(category, name):
+    """This handles the delete feature for categories"""
+    recipe = RECIPE.get_recipe(category, name)
+    if recipe == 'Recipe does not exist':
+        flash('Sorry, recipe '+name+' does not exist.')
+        return redirect(url_for('dashboard'))
+    removed = CATEGORIES[category]['recipes'].pop(name)
+    print(removed, file=sys.stdout)
+    flash('Recipe '+name+' was removed successfully.')
+    return redirect(url_for('dashboard'))

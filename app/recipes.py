@@ -70,6 +70,7 @@ class Recipes(object):
         if name in CATEGORIES[category]['recipes']:
             recipe = CATEGORIES[category]['recipes'][name]
             return recipe
+        return "Recipe does not exist"
 
     def set_recipe(self, category, name, content):
         """Get the recipe from the spefied category"""
