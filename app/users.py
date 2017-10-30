@@ -1,5 +1,5 @@
 """This module manages the users"""
-USERS = {'in@user.com': {'email': 'in@user.com', 'username': 'user', 'password': 'password'}}
+USERS = {}
 
 class User(object):
     """This class manages the app users"""

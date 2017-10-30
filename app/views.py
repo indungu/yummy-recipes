@@ -40,7 +40,6 @@ def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         USER.add_user(form.email.data, form.username.data, form.password.data)
-        print(USERS)
         return redirect(url_for('login'))
     return render_template('signup.html', title=title, form=form)
 
@@ -57,7 +56,6 @@ def login():
         elif user["email"] == form.email.data:
             session['user'] = form.email.data
             session["logged_in"] = True
-            print(session, file=sys.stdout)
             return redirect(url_for('dashboard'))
     return render_template('login.html', title=title, form=form)
 
@@ -74,7 +72,7 @@ def logout():
 @is_authorized
 def dashboard():
     """route to dashboard view"""
-    print(session)
+  
     title = "Dashboard"
     form = CategoryForm()
     form_rec = RecipeForm()
@@ -82,12 +80,17 @@ def dashboard():
         CATEGORY.add_category(form.name.data, form.description.data, session['user'])
         
         return redirect(url_for('dashboard'))
-    print(CATEGORIES)
+
+    user_categories = {}
+    for category in CATEGORIES:
+        if CATEGORIES[category]['owner'] == session['user']:
+           user_categories[category] = CATEGORIES[category]
+        user_categories
     return render_template('dashboard.html',
                            title=title,
                            form=form,
                            form_rec=form_rec,
-                           categories=CATEGORIES
+                           categories=user_categories
                           )
 
 @APP.route('/add_recipe', methods=['GET', 'POST'])
@@ -122,7 +125,7 @@ def edit_category(name):
         return render_template('edit_category.html', form=form)
     if form.validate():
         mod_recipe = CATEGORY.set_category(form.name.data, form.description.data, session['user'])
-        print(mod_recipe, file=sys.stdout)
+
         if mod_recipe == 'Category does not exist.':
             flash('Sorry, Category does not exist.')
             return redirect(url_for('dashboard'))
@@ -138,7 +141,6 @@ def delete_category(name):
         flash('Sorry, category '+name+' does not exist.')
         return redirect(url_for('dashboard'))
     removed = CATEGORIES.pop(name)
-    print(removed, file=sys.stdout)
     flash('Category '+name+' was removed successfully.')
     return redirect(url_for('dashboard'))
 
@@ -165,7 +167,6 @@ def edit_recipe(category, name):
             'ingredients': form.ingredients.data,
             'description': form.description.data
         })
-        print(mod_recipe, file=sys.stdout)
         if mod_recipe == 'Recipe does not exist':
             flash('Sorry, recipe does not exist.')
             return redirect(url_for('dashboard'))
@@ -181,6 +182,5 @@ def delete_recipe(category, name):
         flash('Sorry, recipe '+name+' does not exist.')
         return redirect(url_for('dashboard'))
     removed = CATEGORIES[category]['recipes'].pop(name)
-    print(removed, file=sys.stdout)
     flash('Recipe '+name+' was removed successfully.')
     return redirect(url_for('dashboard'))
