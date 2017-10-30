@@ -13,7 +13,7 @@ class RoutesTestCase(TestCase):
         APP.config['TESTING'] = True
         APP.config['WTF_CSRF_ENABLED'] = False
         self.test_app = APP.test_client()
-        self.user_email = "in@user.me"
+        self.user_email = "win@user.me"
         self.username = "user"
         self.user_password = "password"
         self.user = User()
@@ -51,7 +51,8 @@ class RoutesTestCase(TestCase):
         """This helper method adds a test category"""
         return self.test_app.post('/dashboard', data=dict(
             name='Pies',
-            description='Classic American pies'
+            description='Classic American pies',
+            owner=self.user_email
         ), follow_redirects=True)
 
     def add_recipe(self):
@@ -78,7 +79,7 @@ class RoutesTestCase(TestCase):
         response = self.signup()
         self.assertIn(b'Yummy Recipes | Login', response.data)
 
-    def test_ogin_route(self):
+    def test_login_route(self):
         """Test if the login route/url opens"""
         # Ensure user can navigate to login page
         response = self.test_app.get('/login', content_type='html/text')
@@ -145,13 +146,15 @@ class RoutesTestCase(TestCase):
         # Ensure that exiting category can be updated
         response = self.test_app.post('/edit_category/Pies', data=dict(
             name='Pies',
-            description='Good old pie recipes'
+            description='Good old pie recipes',
+            owner=self.user_email
         ), follow_redirects=True)
         self.assertIn(b'Good old pie recipes', response.data)
-        # Ensure that exiting category name can't be updated
+        # Ensure that exiting category name can't be changed explicitly
         response = self.test_app.post('/edit_category/Pies', data=dict(
             name='Cookies',
-            description='Good old cookie recipes'
+            description='Good old cookie recipes',
+            owner=self.user_email
         ), follow_redirects=True)
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
         self.assertIn(b'Sorry, Category does not exist.', response.data)

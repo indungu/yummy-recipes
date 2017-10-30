@@ -10,9 +10,10 @@ class Categories(object):
         """Initialize objects of this class with the following"""
         self.name = ''
         self.description = ''
+        self.owner = ''
         self.recipes = {}
 
-    def add_category(self, name, description):
+    def add_category(self, name, description, owner):
         """Add to categories list"""
         self.name = name
         self.description = description
@@ -21,28 +22,32 @@ class Categories(object):
         CATEGORIES[name] = {
             "name": self.name,
             "description": self.description,
-            "recipes": self.recipes
+            "recipes": self.recipes,
+            "owner": owner
         }
         return CATEGORIES[name]
 
-    def get_category(self, name):
+    def get_category(self, name, owner):
         """Returns the named category or error message"""
-        if name in CATEGORIES:
+        if name in CATEGORIES and CATEGORIES[name]['owner'] == owner:
             return CATEGORIES[name]
         return "Category does not exist."
 
-    def set_category(self, name, description=None):
+    def set_category(self, name, description, owner):
         """Returns the updated category or error message"""
         if name in CATEGORIES:
             CATEGORIES[name] = {
-                "name": name, "description": description, 'recipes': CATEGORIES[name]['recipes']
+                "name": name,
+                "description": description,
+                'owner': owner,
+                'recipes': CATEGORIES[name]['recipes']
             }
             return CATEGORIES[name]
         return "Category does not exist."
 
-    def delete_category(self, name):
+    def delete_category(self, name, owner):
         """Deletes a category and returns confirmation or error"""
-        if name in CATEGORIES:
+        if name in CATEGORIES and CATEGORIES[name]['owner'] == owner:
             CATEGORIES.pop(name)
             return "Removed successfully."
         return "Category does not exist."
