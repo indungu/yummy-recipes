@@ -5,7 +5,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 
 from app import APP
 from .forms import SignupForm, LoginForm, CategoryForm, RecipeForm
-from .users import User
+from .users import User, USERS
 from .recipes import CATEGORIES, Categories, Recipes
 
 USER = User()
@@ -14,8 +14,6 @@ RECIPE = Recipes()
 
 APP.secret_key = "Myl1TtL34cr3t"
 
-session = {}
-
 def is_authorized(function):
     """
     Thus creates a wrapper function decorator that checks user authorization
@@ -23,7 +21,7 @@ def is_authorized(function):
     @wraps(function)
     def authorizer(*args, **kwargs):
         """Confirms user is not on an active session"""
-        if 'logged_in' not in session:
+        if 'user' not in session:
             flash('Sorry, you need to be logged in to view this', 'warning')
             return redirect(url_for('login'))
         return function(*args, **kwargs)
@@ -42,6 +40,7 @@ def signup():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         USER.add_user(form.email.data, form.username.data, form.password.data)
+        print(USERS)
         return redirect(url_for('login'))
     return render_template('signup.html', title=title, form=form)
 
@@ -56,7 +55,9 @@ def login():
             flash('Invalid user!')
             return redirect(url_for('login'))
         elif user["email"] == form.email.data:
+            session['user'] = form.email.data
             session["logged_in"] = True
+            print(session, file=sys.stdout)
             return redirect(url_for('dashboard'))
     return render_template('login.html', title=title, form=form)
 
@@ -65,6 +66,7 @@ def login():
 def logout():
     """logout route"""
     session.pop('logged_in')
+    session.pop('user')
     flash('You were logged out successfully')
     return redirect(url_for('login'))
 
@@ -72,12 +74,15 @@ def logout():
 @is_authorized
 def dashboard():
     """route to dashboard view"""
+    print(session)
     title = "Dashboard"
     form = CategoryForm()
     form_rec = RecipeForm()
     if request.method == 'POST' and form.validate():
-        CATEGORY.add_category(form.name.data, form.description.data)
+        CATEGORY.add_category(form.name.data, form.description.data, session['user'])
+        
         return redirect(url_for('dashboard'))
+    print(CATEGORIES)
     return render_template('dashboard.html',
                            title=title,
                            form=form,
@@ -108,7 +113,7 @@ def edit_category(name):
     """Handles the category edit"""
     form = CategoryForm()
     if request.method == 'GET':
-        category = CATEGORY.get_category(name)
+        category = CATEGORY.get_category(name, session['user'])
         if category == 'Category does not exist.':
             flash(category)
             return redirect(url_for('dashboard'))
@@ -116,7 +121,7 @@ def edit_category(name):
         form.description.data = category['description']
         return render_template('edit_category.html', form=form)
     if form.validate():
-        mod_recipe = CATEGORY.set_category(form.name.data, form.description.data)
+        mod_recipe = CATEGORY.set_category(form.name.data, form.description.data, session['user'])
         print(mod_recipe, file=sys.stdout)
         if mod_recipe == 'Category does not exist.':
             flash('Sorry, Category does not exist.')
@@ -128,7 +133,7 @@ def edit_category(name):
 @is_authorized
 def delete_category(name):
     """This handles the delete feature for categories"""
-    category = CATEGORY.get_category(name)
+    category = CATEGORY.get_category(name, session['user'])
     if category == 'Category does not exist.':
         flash('Sorry, category '+name+' does not exist.')
         return redirect(url_for('dashboard'))
