@@ -156,6 +156,66 @@ class RoutesTestCase(TestCase):
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
         self.assertIn(b'Sorry, Category does not exist.', response.data)
 
+    def test_delete_category_route(self):
+        """Tests for the category delete feature route"""
+        # Instanciate test
+        self.signup()
+        self.login()
+        self.add_category()
+        # Ensure that non-existing categories are flagged
+        response = self.test_app.get('/delete_category/Cookies', follow_redirects=True)
+        self.assertIn(b'Sorry, category Cookies does not exist.', response.data)
+        # Ensure that category supplied is deleted
+        response = self.test_app.get('/delete_category/Pies', follow_redirects=True)
+        self.assertIn(b'Category Pies was removed successfully.', response.data)
+
+    def test_edit_recipe_route(self):
+        """Tests for the edit category route"""
+        # Initialize
+        self.signup()
+        self.login()
+        self.add_category()
+        self.add_recipe()
+        # Ensure that the edit recipe view loads
+        response = self.test_app.get('/edit_recipe/Pies/Apple_Pie', follow_redirects=True)
+        self.assertIn(b'Edit Apple_Pie Recipe', response.data)
+        # Ensure that incorrect recipes are flagged
+        response = self.test_app.get('/edit_recipe/Cookies/Chocolate_Chip', follow_redirects=True)
+        self.assertIn(b'Recipe does not exist', response.data)
+        # Ensure that exiting recipes can be updated
+        response = self.test_app.post('/edit_recipe/Pies/Apple_Pie', data=dict(
+            category='Pies',
+            name='Pot Pie',
+            fun_fact='Yes, it is indeed a pie with pot',
+            ingredients='Pot\nGoogle\nPie',
+            description='Prepare with care, serve with lots of love and other smaller pies'
+        ), follow_redirects=True)
+        self.assertIn(b'Recipe updated successfully.', response.data)
+        # Ensure that exiting category name can't be updated
+        response = self.test_app.post('/edit_recipe/Pies/Chicken_Pot_Pie', data=dict(
+            category='Pies',
+            name='Chicken Pot Pie',
+            fun_fact='Yes, it is indeed a pie with pot',
+            ingredients='Pot\nGoogle\nPie',
+            description='Prepare with care, serve with lots of love and other smaller pies'
+        ), follow_redirects=True)
+        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
+        self.assertIn(b'Sorry, recipe does not exist.', response.data)
+
+    def test_delete_recipe_route(self):
+        """Tests for the category delete feature route"""
+        # Instanciate test
+        self.signup()
+        self.login()
+        self.add_category()
+        self.add_recipe()
+        # Ensure that non-existing recipes are flagged
+        response = self.test_app.get('/delete_recipe/Pies/Chocolate_Chip', follow_redirects=True)
+        self.assertIn(b'Sorry, recipe Chocolate_Chip does not exist.', response.data)
+        # Ensure that recipe supplied is deleted
+        response = self.test_app.get('/delete_recipe/Pies/Apple_Pie', follow_redirects=True)
+        self.assertIn(b'Recipe Apple_Pie was removed successfully.', response.data)
+
     def test_invalid_routes(self):
         """Test if invalid routes are flagged"""
         response = self.test_app.get('/something')

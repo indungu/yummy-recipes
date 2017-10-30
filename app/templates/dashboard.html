@@ -92,11 +92,11 @@
                                         <h6>Ingredients</h6>
                                         <p>{{categories[category]['recipes'][recipe]['ingredients']}}</p>
                                         <h6>Directions and Serving</h6>
-                                        <p>{{categories[category]['recipes'][recipe]['directions']}}</p>
+                                        <p>{{categories[category]['recipes'][recipe]['description']}}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-outline-info" id="editRecipeBtn" onclick="underConstruction()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</button>
-                                        <button type="button" class="btn btn-danger" id="delRecipeBtn" onclick="underConstruction()"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</button>
+                                        <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-info" id="editRecipeBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</a>
+                                        <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</a>
                                     </div>
                                 </div>
                                 {% endfor %}
