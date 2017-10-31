@@ -11,18 +11,76 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/lib/bootstrap.min.css')}}">
         <!--Custom CSS-->
         <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-        <!--Font Awesome CSS-->
+        <!--Fonts and Icon embeds-->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     </head>
     <body class="mainBg">
+        <header class="navbar navbar-toggleable-md navbar-light bg-secodary bg-faded">
+            <nav class="container w-100">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="{{url_for('index')}}" style="font-family: 'Courgette', cursive;">Yummy Recipes</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                    {% if title == "Sign Up" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('index')}}">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Sign Up<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                        </li>
+                    {% endif %}
+                    {% if title == "Login" %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('index')}}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('signup')}}">Sign Up</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Login<span class="sr-only">(current)</span></a>
+                        </li>
+                    {% endif %}
+                    {% if title == "Welcome" %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('signup')}}">Sign Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                    {% if (title == "Dashboard") %}
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-warning alert-dismissable" role="alert" style="margin-bottom: 0 !important">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="container w-50" style="padding: 9px;">
+                        <div class="alert alert-warning alert-dismissable" role="alert" style="margin-bottom: 0 !important">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </div>
                 {% endfor %}
             {% endif %}

@@ -109,7 +109,7 @@ class RoutesTestCase(TestCase):
         self.signup()
         response = self.login()
         self.assertIn(
-            b'Dashboard\n',
+            b'Yummy Recipes | Dashboard',
             response.data
         )
         # Ensure that a user can add a new category
@@ -123,7 +123,7 @@ class RoutesTestCase(TestCase):
         # Ensure that explicit entry of this URL in browser redirects to dashboard
         # whilst user is in session
         response = self.test_app.get('/add_recipe', follow_redirects=True)
-        self.assertIn(b'Dashboard\n', response.data)
+        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
         # Ensure that user can only add a recipe to existing category
         response = self.add_recipe()
         self.assertIn(b'Category does not exist.', response.data)
@@ -139,7 +139,7 @@ class RoutesTestCase(TestCase):
         self.add_category()
         # Ensure that the edit category view loads
         response = self.test_app.get('/edit_category/Pies', follow_redirects=True)
-        self.assertIn(b'Edit Pies Category', response.data)
+        self.assertIn(b'Yummy Recipes | Edit Category', response.data)
         # Ensure that incorrect categories are flagged
         response = self.test_app.get('/edit_category/Cookies', follow_redirects=True)
         self.assertIn(b'Category does not exist.', response.data)
@@ -181,7 +181,7 @@ class RoutesTestCase(TestCase):
         self.add_recipe()
         # Ensure that the edit recipe view loads
         response = self.test_app.get('/edit_recipe/Pies/Apple_Pie', follow_redirects=True)
-        self.assertIn(b'Edit Apple_Pie Recipe', response.data)
+        self.assertIn(b'Yummy Recipes | Edit Recipe', response.data)
         # Ensure that incorrect recipes are flagged
         response = self.test_app.get('/edit_recipe/Cookies/Chocolate_Chip', follow_redirects=True)
         self.assertIn(b'Recipe does not exist', response.data)
