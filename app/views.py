@@ -47,6 +47,7 @@ def signup():
 def login():
     """login view route"""
     title = "Login"
+    print(session)
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = USER.get_user(form.email.data, form.password.data)
@@ -63,8 +64,7 @@ def login():
 @is_authorized
 def logout():
     """logout route"""
-    session.pop('logged_in')
-    session.pop('user')
+    session.clear()
     flash('You were logged out successfully')
     return redirect(url_for('login'))
 
@@ -114,6 +114,7 @@ def add_recipe():
 @is_authorized
 def edit_category(name):
     """Handles the category edit"""
+    title = "Edit Category"
     form = CategoryForm()
     if request.method == 'GET':
         category = CATEGORY.get_category(name, session['user'])
@@ -122,7 +123,7 @@ def edit_category(name):
             return redirect(url_for('dashboard'))
         form.name.data = category['name']
         form.description.data = category['description']
-        return render_template('edit_category.html', form=form)
+        return render_template('edit_category.html', form=form, title=title)
     if form.validate():
         mod_recipe = CATEGORY.set_category(form.name.data, form.description.data, session['user'])
 
@@ -148,6 +149,7 @@ def delete_category(name):
 @is_authorized
 def edit_recipe(category, name):
     """Handles the category edit"""
+    title = "Edit Recipe"
     form = RecipeForm()
     if request.method == 'GET':
         recipe = RECIPE.get_recipe(category, name)
@@ -159,7 +161,7 @@ def edit_recipe(category, name):
         form.fun_fact.data = CATEGORIES[category]['recipes'][name]['fun_fact']
         form.ingredients.data = CATEGORIES[category]['recipes'][name]['ingredients']
         form.description.data = CATEGORIES[category]['recipes'][name]['description']
-        return render_template('edit_recipe.html', form=form)
+        return render_template('edit_recipe.html', form=form, title=title)
     if form.validate():
         mod_recipe = RECIPE.set_recipe(form.category.data, name, {
             'name': form.name.data,
