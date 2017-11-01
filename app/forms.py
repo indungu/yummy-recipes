@@ -17,7 +17,8 @@ class SignupForm(FlaskForm):
     )
     password = PasswordField('New Password', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
+        validators.EqualTo('confirm', message='Passwords must match'),
+        validators.length(min=8, message='Password needs to be atleast 8 characters long')
     ])
     confirm = PasswordField('Confirm Password', [validators.data_required()])
     submit = SubmitField("Submit")
@@ -46,11 +47,9 @@ class CategoryForm(FlaskForm):
 
 class RecipeForm(FlaskForm):
     """This defines the form for recipe manipulation"""
-    category = StringField('Category', [
-        validators.data_required(message='Enter a category please.')
-    ])
     name = StringField('Name', [
-        validators.data_required('A name for your recipe would be nice')
+        validators.data_required('A name for your recipe would be nice'),
+        validators.length(min=4, message="The name should be more than 4 characters long")
     ])
     fun_fact = StringField('Fun Fact')
     ingredients = TextAreaField('Ingredients', [

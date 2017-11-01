@@ -26,4 +26,5 @@ class User(object):
             # confirm that correct password was entered
             if current_user["password"] == password:
                 return current_user
+            return "Password error!"
         return "User not found!"

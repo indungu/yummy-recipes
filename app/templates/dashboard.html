@@ -44,12 +44,13 @@
                     <div class="card" style="margin-top: 10px">
                         <div class="card-header">
                             {{category}}
-                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#newRecipeModal">Add Recipe</button>
+                            <a href="/add_recipe/{{category}}" class="btn btn-outline-primary">Add Recipe</a>
                         </div>
                         <div class="card-block">
                             <div id="accordion" role="tablist" aria-multiselectable="true">
                                 {% with recipes = categories[category]['recipes'] %}
                                 {% for recipe in recipes %}
+                                {% if recipes[recipe]['category'] == category %}
                                 <div class="card" style="margin-bottom: 5px">
                                     <div class="card-header" role="tab" id="recipeOne">
                                         <h5 class="mb-0">
@@ -69,6 +70,7 @@
                                         <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</a>
                                     </div>
                                 </div>
+                                {% endif %}
                                 {% endfor %}
                                 {% endwith %}
 
@@ -105,44 +107,6 @@
                     </div>
                 </div>
                 
-                <!-- New Recipe Modal -->
-                <div class="modal fade" id="newRecipeModal" tabindex="-1" role="dialog" aria-labelledby="newRecipeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            {% from "_formhelper.html" import render_field %}
-                            <form action="/add_recipe" method="POST">
-                                {{form_rec.hidden_tag()}}
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">New Recipe</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        {{render_field(form_rec.category, class='form-control', placeholder='Category name')}}
-                                    </div>
-                                    <div class="form-group">
-                                        {{render_field(form_rec.name, class='form-control', placeholder='Name of the recipe')}}
-                                    </div>
-                                    <div class="form-group">
-                                        {{render_field(form_rec.fun_fact, class='form-control', placeholder='Tell us something fun about this recipe')}}
-                                    </div>
-                                    <div class="form-group">
-                                        {{render_field(form_rec.ingredients, class='form-control', placeholder='What ingredients are need?')}}                                   
-                                    </div>
-                                    <div class="form-group">
-                                        {{render_field(form_rec.description, class='form-control', placeholder='How to prepare and serve')}}
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Add Recipe</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -6,6 +6,8 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
         <title>Yummy Recipes | {{ title }}</title>
+        <!-- Serving the favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
         
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="{{url_for('static', filename='css/lib/bootstrap.min.css')}}">
@@ -60,13 +62,14 @@
                     {% endif %}
                     </ul>
                     {% if (title == "Dashboard") %}
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
+                            <li class="nav-item">
+                                <div class="text-info" id="welcome">Welcome {{user}}</div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
+                            </li>
+                        </ul>
                     {% endif %}
                 </div>
             </nav>

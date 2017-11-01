@@ -35,3 +35,9 @@ class UserManagementTestCase(unittest.TestCase):
         """Testing user retrival for a user that doesn't exist"""
         retrieved_user = self.user.get_user("user@email.me", self.password)
         self.assertEqual(retrieved_user, "User not found!")
+
+    def test_login_against_wrong_password(self):
+        """Testing user retrival for a user that does exist with a wrong password"""
+        self.user.add_user("self.user_email", "self.username", self.password)
+        retrieved_user = self.user.get_user("self.user_email", "some_password")
+        self.assertEqual(retrieved_user, "Password error!")

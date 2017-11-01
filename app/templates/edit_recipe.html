@@ -3,10 +3,11 @@
 {% block body %}
 {% from "_formhelper.html" import render_field %}
 <div class="container">
-   <form class="form" action="/edit_recipe/{{form.category.data}}/{{form.name.data}}" method="POST">
+   <form class="form" action="/edit_recipe/{{category}}/{{form.name.data}}" method="POST">
         {{form.hidden_tag()}}
         <div class="form-group">
-            {{render_field(form.category, class="form-control form-control-static")}}
+            <strong class="text-primary">Category</strong>
+            <div class="category"><p class="text-white">{{category}}</p></div>
         </div>
         <div class="form-group">
             {{render_field(form.name, class="form-control")}}        
