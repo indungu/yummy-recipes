@@ -53,7 +53,7 @@ alternatively
 ```bash
   #!/bin/bash
   $ git clone -b dev https://github.com/indungu/yummy-recipes # Clone repo's dev branch
-  $. cd yummy-recipes  # Switch to working directory
+  $ cd yummy-recipes  # Switch to working directory
   $ virtualenv venv        # Install virtual envronment
   $ bin/activate             # Activate virtualenv
   $ pip install -r requirements.txt # Install package dependencies
@@ -75,13 +75,4 @@ In an elevated `cmd` prompt or PowerShell instance, enter the following commands
   > pip install pytest                     # Install testing script
 ```
 
-## To-Do
-
-1. Add user account create
-
-2. Add user login
-
-3. Add recipe categories `CRUD` features.
-
-4. Add recipe `CRUD` features.
 
