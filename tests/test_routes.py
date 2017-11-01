@@ -57,7 +57,7 @@ class RoutesTestCase(TestCase):
 
     def add_recipe(self):
         """This helper method adds a test recipe"""
-        return self.test_app.post('/add_recipe', data=dict(
+        return self.test_app.post('/add_recipe/Pies', data=dict(
             category='Pies',
             name='Apple Pie',
             fun_fact='Pilgrims thanksgiving gift to the Native Americans',
@@ -89,8 +89,15 @@ class RoutesTestCase(TestCase):
         response = self.login()
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
         # Ensure user can't loggin with invalid credentials
-        response = self.login('some@email.com', 'somepass')
-        self.assertIn(b'Invalid user!', response.data)
+        # Invalid/none existing email
+        response = self.login('some@email.com', self.user_password)
+        self.assertIn(b'Invalid/Unregistered user! Sign Up to create account.', response.data)
+        self.assertIn(b'Yummy Recipes | Sign Up', response.data)
+        # Wrong password
+        response = self.login(self.user_email, "fake_pass")
+        self.assertIn(b'Password error!. Please enter the correct details.\n', response.data)
+        self.assertIn(b'Yummy Recipes | Login', response.data)
+
 
     def test_logout_route(self):
         """Test that user can logout"""
@@ -122,8 +129,8 @@ class RoutesTestCase(TestCase):
         self.login()
         # Ensure that explicit entry of this URL in browser redirects to dashboard
         # whilst user is in session
-        response = self.test_app.get('/add_recipe', follow_redirects=True)
-        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
+        response = self.test_app.get('/add_recipe/Pies', follow_redirects=True)
+        self.assertIn(b'Yummy Recipes | Add Recipe', response.data)
         # Ensure that user can only add a recipe to existing category
         response = self.add_recipe()
         self.assertIn(b'Category does not exist.', response.data)
@@ -194,6 +201,15 @@ class RoutesTestCase(TestCase):
             description='Prepare with care, serve with lots of love and other smaller pies'
         ), follow_redirects=True)
         self.assertIn(b'Recipe updated successfully.', response.data)
+        # Ensure that exiting recipes can't be updated with invalid data
+        response = self.test_app.post('/edit_recipe/Pies/Apple_Pie', data=dict(
+            category='Pies',
+            name='Pot Pie',
+            fun_fact='Yes, it is indeed a pie with pot',
+            ingredients='',
+            description=''
+        ), follow_redirects=True)
+        self.assertIn(b'Sorry you provided invalid values, Please try again.', response.data)
         # Ensure that exiting category name can't be updated
         response = self.test_app.post('/edit_recipe/Pies/Chicken_Pot_Pie', data=dict(
             category='Pies',

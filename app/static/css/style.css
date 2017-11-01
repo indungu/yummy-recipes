@@ -26,7 +26,7 @@ body {
 .form{
     background-color: rgba(14, 35, 47, 0.9);
     max-width: 350px;
-    padding: 40px;
+    padding: 30px;
     margin: 5px  auto;
     border-radius: 5px;
     box-shadow: 0px 3px 11px 3px rgba(14, 35, 47, 0.39);
@@ -52,4 +52,20 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 
+}
+
+/* Category tag style */
+
+.category {
+    background-color: rgba(14, 35, 47, 0.9) !important;
+    padding-left: 8px;
+    font-family: 'Courgette', cursive;
+    font-size: 24px;
+}
+
+#welcome {
+    margin-right: 10px;
+    padding: 5px;
+    font-family: 'Courgette', cursive;
+    font-size: 24px;
 }

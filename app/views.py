@@ -52,12 +52,17 @@ def login():
     if request.method == 'POST' and form.validate():
         user = USER.get_user(form.email.data, form.password.data)
         if user == "User not found!":
-            flash('Invalid user!')
+            flash('Invalid/Unregistered user! Sign Up to create account.')
+            return redirect(url_for('signup'))
+        elif user == "Password error!":
+            flash(user+'. Please enter the correct details.')
             return redirect(url_for('login'))
         elif user["email"] == form.email.data:
             session['user'] = form.email.data
+            session['username'] = USERS[form.email.data]['username']
             session["logged_in"] = True
-            return redirect(url_for('dashboard'))
+            print(session)
+            return redirect(url_for('dashboard', user=session['username']))
     return render_template('login.html', title=title, form=form)
 
 @APP.route('/logout/')
@@ -75,12 +80,12 @@ def dashboard():
   
     title = "Dashboard"
     form = CategoryForm()
-    form_rec = RecipeForm()
     if request.method == 'POST' and form.validate():
-        CATEGORY.add_category(form.name.data, form.description.data, session['user'])
-        
+        status = CATEGORY.add_category(form.name.data, form.description.data, session['user'])
+        if status == "Sorry. Category already exists":
+            flash(status)
         return redirect(url_for('dashboard'))
-
+    print(CATEGORY.recipes)
     user_categories = {}
     for category in CATEGORIES:
         if CATEGORIES[category]['owner'] == session['user']:
@@ -89,33 +94,35 @@ def dashboard():
     return render_template('dashboard.html',
                            title=title,
                            form=form,
-                           form_rec=form_rec,
+                           user=session['username'],
                            categories=user_categories
                           )
 
-@APP.route('/add_recipe', methods=['GET', 'POST'])
+@APP.route('/add_recipe/<category>', methods=['GET', 'POST'])
 @is_authorized
-def add_recipe():
+def add_recipe(category):
     """Adds a new recipe and redirects to dash"""
-    form_rec = RecipeForm()
-    if request.method == 'POST' and form_rec.validate():
+    title = "Add Recipe"
+    form = RecipeForm()
+    if request.method == 'POST' and form.validate():
         recipe = {
-            'name': '_'.join(form_rec.name.data.split()),
-            'fun_fact': form_rec.fun_fact.data,
-            'ingredients': form_rec.ingredients.data,
-            'description': form_rec.description.data
+            'category': category,
+            'name': '_'.join(form.name.data.split()),
+            'fun_fact': form.fun_fact.data,
+            'ingredients': form.ingredients.data,
+            'description': form.description.data
         }
-        confirmation = RECIPE.add_recipe(form_rec.category.data, recipe)
+        confirmation = RECIPE.add_recipe(category, recipe)
         flash(confirmation)
         return redirect(url_for('dashboard'))
-    return redirect(url_for('dashboard'))
+    return render_template('add_recipe.html', title=title, form=form, category=category)
 
 @APP.route('/edit_category/<name>', methods=['GET', 'POST'])
 @is_authorized
 def edit_category(name):
     """Handles the category edit"""
     title = "Edit Category"
-    form = CategoryForm()
+    form = CategoryForm(request.form)
     if request.method == 'GET':
         category = CATEGORY.get_category(name, session['user'])
         if category == 'Category does not exist.':
@@ -142,6 +149,14 @@ def delete_category(name):
         flash('Sorry, category '+name+' does not exist.')
         return redirect(url_for('dashboard'))
     removed = CATEGORIES.pop(name)
+    print(removed)
+    print(CATEGORY.recipes)
+    recipes_to_delete = []
+    for recipe in CATEGORY.recipes:
+        if CATEGORY.recipes[recipe]['category'] == name:
+            recipes_to_delete.append(recipe)
+    for item in recipes_to_delete:
+        del CATEGORY.recipes[item]
     flash('Category '+name+' was removed successfully.')
     return redirect(url_for('dashboard'))
 
@@ -156,15 +171,14 @@ def edit_recipe(category, name):
         if recipe == 'Recipe does not exist':
             flash(recipe)
             return redirect(url_for('dashboard'))
-        form.category.data = category
         form.name.data = CATEGORIES[category]['recipes'][name]['name']
         form.fun_fact.data = CATEGORIES[category]['recipes'][name]['fun_fact']
         form.ingredients.data = CATEGORIES[category]['recipes'][name]['ingredients']
         form.description.data = CATEGORIES[category]['recipes'][name]['description']
-        return render_template('edit_recipe.html', form=form, title=title)
-    if form.validate():
-        mod_recipe = RECIPE.set_recipe(form.category.data, name, {
-            'name': form.name.data,
+        return render_template('edit_recipe.html', form=form, title=title, category=category)
+    if form.validate_on_submit():
+        mod_recipe = RECIPE.set_recipe(category, name, {
+            'name': '_'.join(form.name.data.split()),
             'fun_fact': form.fun_fact.data,
             'ingredients': form.ingredients.data,
             'description': form.description.data
@@ -174,6 +188,8 @@ def edit_recipe(category, name):
             return redirect(url_for('dashboard'))
         flash('Recipe updated successfully.')
         return redirect(url_for('dashboard'))
+    flash('Sorry you provided invalid values, Please try again.')
+    return redirect(url_for('edit_recipe', category=category, name=name))
 
 @APP.route('/delete_recipe/<category>/<name>')
 @is_authorized
