@@ -7,6 +7,7 @@ name = "pypi"
 flask = "*"
 flask-wtf = "*"
 gunicorn = "*"
+waitress = "*"
 
 [dev-packages]
 pylint = "*"
