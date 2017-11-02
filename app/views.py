@@ -31,7 +31,10 @@ def is_authorized(function):
 def index():
     """Index view route"""
     title = "Welcome"
-    return render_template('index.html', title=title)
+    if "logged_in" not in session:
+        return render_template('index.html', title=title)
+    if session['logged_in'] == True:
+        return redirect(url_for('dashboard'))
 
 @APP.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -39,15 +42,21 @@ def signup():
     title = "Sign Up"
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
-        USER.add_user(form.email.data, form.username.data, form.password.data)
-        return redirect(url_for('login'))
-    return render_template('signup.html', title=title, form=form)
+        status = USER.add_user(form.email.data, form.username.data, form.password.data)
+        flash(status)
+        if status == "Sorry, that email is already registered.":
+            return redirect(url_for('signup'))
+        else:
+            return redirect(url_for('login'))
+    elif "logged_in" not in session:
+        return render_template('signup.html', title=title, form=form)
+    if session['logged_in'] == True:
+        return redirect(url_for('dashboard'))
 
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
     """login view route"""
     title = "Login"
-    print(session)
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         user = USER.get_user(form.email.data, form.password.data)
@@ -84,13 +93,15 @@ def dashboard():
         status = CATEGORY.add_category(form.name.data, form.description.data, session['user'])
         if status == "Sorry. Category already exists":
             flash(status)
-        return redirect(url_for('dashboard'))
+        else: 
+            return redirect(url_for('dashboard'))
     print(CATEGORY.recipes)
     user_categories = {}
     for category in CATEGORIES:
         if CATEGORIES[category]['owner'] == session['user']:
            user_categories[category] = CATEGORIES[category]
-        user_categories
+        else: # pragma: no cover
+            user_categories
     return render_template('dashboard.html',
                            title=title,
                            form=form,

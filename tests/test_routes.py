@@ -3,7 +3,7 @@
 from unittest import TestCase
 
 from app import APP
-from app.users import User
+from app.users import User, USERS
 
 class RoutesTestCase(TestCase):
     """This class contains all the test methods used for testing"""
@@ -21,6 +21,7 @@ class RoutesTestCase(TestCase):
     def tearDown(self):
         """The following is done at the end of each test"""
         self.logout()
+        USERS.clear()
 
     def signup(self):
         """This is the signup helper method"""
@@ -67,10 +68,18 @@ class RoutesTestCase(TestCase):
 
     # Ensure that welcome page loads on the root route
     def test_root_route(self):
-        """Tests whether the root url opens"""
+        """Tests whether the root url"""
+        # Ensure that landing page opens for non logged in user
         reponse = self.test_app.get('/')
         self.assertEqual(reponse.status_code, 200)
-        self.assertIn(b'Welcome foodie', reponse.data)
+        self.assertIn(b'Yummy Recipes | Welcome', reponse.data)
+        # Ensure that landing page redirect to dashboard
+        # for logged in user
+        self.signup()
+        self.login()
+        reponse = self.test_app.get('/', follow_redirects=True)
+        self.assertEqual(reponse.status_code, 200)
+        self.assertIn(b'Yummy Recipes | Dashboard', reponse.data)
 
     def test_signup_route(self):
         """Test if the signup route/url opens"""
@@ -78,6 +87,13 @@ class RoutesTestCase(TestCase):
         self.assertIn(b'Yummy Recipes | Sign Up', response.data)
         response = self.signup()
         self.assertIn(b'Yummy Recipes | Login', response.data)
+        # Assert the same email cannot register a new account
+        response = self.signup()
+        self.assertIn(b'Sorry, that email is already registered.', response.data)
+        # Ensure that logged in users can't access signup page
+        self.login()
+        response = self.test_app.get('/signup', follow_redirects=True)
+        self.assertIn(b'Yummy Recipes | Dashboard', response.data)
 
     def test_login_route(self):
         """Test if the login route/url opens"""
@@ -88,7 +104,8 @@ class RoutesTestCase(TestCase):
         self.signup()
         response = self.login()
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
-        # Ensure user can't loggin with invalid credentials
+        self.logout()
+        # Ensure user can't login with invalid credentials
         # Invalid/none existing email
         response = self.login('some@email.com', self.user_password)
         self.assertIn(b'Invalid/Unregistered user! Sign Up to create account.', response.data)

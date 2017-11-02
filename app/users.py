@@ -17,7 +17,7 @@ class User(object):
             return "User added successfully."
         return "Sorry, that email is already registered."
 
-    def get_user(self, email=None, password=None):
+    def get_user(self, email, password):
         """This method gets an existing user from the users's list"""
         # Get an existing user
         # First check whether user account exists
