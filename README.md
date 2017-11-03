@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/indungu/yummy-recipes.svg?branch=master)](https://travis-ci.org/indungu/yummy-recipes)
 [![Coverage Status](https://coveralls.io/repos/github/indungu/yummy-recipes/badge.svg?branch=master)](https://coveralls.io/github/indungu/yummy-recipes?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ff319a6eb5843534abb1/maintainability)](https://codeclimate.com/github/indungu/yummy-recipes/maintainability)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7539da927da541288a5658fc437d1be9)](https://www.codacy.com/app/indungu/yummy-recipes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=indungu/yummy-recipes&amp;utm_campaign=Badge_Grade)
 
 Yummy recipes provides a platform for users to keep track of their awesome recipes and share with others if they so wish.
 
@@ -65,7 +66,7 @@ alternatively
 
 In an elevated `cmd` prompt or PowerShell instance, enter the following commands
 
-```bat
+```ps1
 #!c:\user\usr\
 
   > git clone -b dev https://github.com/indungu/yummy-recipes # Clone repo's dev branch
