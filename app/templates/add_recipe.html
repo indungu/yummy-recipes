@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
 {% from "_formhelper.html" import render_field %}
-
-    <form class="container form" action="/add_recipe/{{category}}" method="POST">
+<div  class="container formedit">
+    <form action="/add_recipe/{{category}}" method="POST">
         {{form.hidden_tag()}}
             <div class="form-group">
                 <strong class="text-primary">Name</strong>
@@ -15,7 +15,7 @@
                 {{render_field(form.fun_fact, class='form-control', placeholder='Tell us something fun about this recipe')}}
             </div>
             <div class="form-group">
-                {{render_field(form.ingredients, class='form-control', placeholder='What ingredients are need?')}}                                   
+                {{render_field(form.ingredients, class='form-control', placeholder='What ingredients are need?')}}                                  
             </div>
             <div class="form-group">
                 {{render_field(form.description, class='form-control', placeholder='How to prepare and serve')}}
@@ -24,4 +24,5 @@
             <a href="/dashboard" class="btn btn-outline-success">Cancel</a>
             <button type="submit" class="btn btn-primary">Add Recipe</button>
     </form>
+</div>
 {% endblock %}

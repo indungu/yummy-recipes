@@ -3,7 +3,7 @@
 {% block body %}
 
 {% from "_formhelper.html" import render_field %}
-<form class="container form" action="/login" method="post">
+<form class="container form w-40" action="/login" method="post">
     {{ form.hidden_tag() }}
     <div class="form-group">
         {{ render_field(form.email, class="form-control", placeholder="Email") }}

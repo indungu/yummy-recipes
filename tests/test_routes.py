@@ -167,21 +167,30 @@ class RoutesTestCase(TestCase):
         # Ensure that incorrect categories are flagged
         response = self.test_app.get('/edit_category/Cookies', follow_redirects=True)
         self.assertIn(b'Category does not exist.', response.data)
-        # Ensure that exiting category can be updated
+        # Ensure that existing category can be updated
         response = self.test_app.post('/edit_category/Pies', data=dict(
             name='Pies',
             description='Good old pie recipes',
             owner=self.user_email
         ), follow_redirects=True)
         self.assertIn(b'Good old pie recipes', response.data)
-        # Ensure that exiting category name can't be changed explicitly
+        # Ensure that existing category name can be changed on post request
         response = self.test_app.post('/edit_category/Pies', data=dict(
             name='Cookies',
             description='Good old cookie recipes',
             owner=self.user_email
         ), follow_redirects=True)
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
-        self.assertIn(b'Sorry, Category does not exist.', response.data)
+        self.assertIn(b'Category updated successfully\n', response.data)
+
+        # Ensure that existing category name can.t be changed with invalid data on post request
+        response = self.test_app.post('/edit_category/Pies', data=dict(
+            name='Coo',
+            description='Good old cookie recipes',
+            owner=self.user_email
+        ), follow_redirects=True)
+        self.assertIn(b'Yummy Recipes | ', response.data)
+        self.assertIn(b'Invalid form details, please check your category name.\n', response.data)
 
     def test_delete_category_route(self):
         """Tests for the category delete feature route"""

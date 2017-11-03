@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-3">
                 <ul class="list-group" style="margin-bottom: 10px">
-                    <button type="button" class="list-group-item list-group-item-action active">View Categories</button>
+                    <button type="button" class="list-group-item list-group-item-action active" data-toggle="tooltip" data-placement="top" title="You are here">View Categories</button>
                     <button type="button" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#categoryModal">
                         Add Category
                     </button>
@@ -24,8 +24,12 @@
                         <div class="col-md-3">
                             <div class="well">
                                 <div class="well" style="margin: 5px">
-                                    <a href="/edit_category/{{category}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    <a href="/delete_category/{{category}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                    <a href="/edit_category/{{category}}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Category">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="/delete_category/{{category}}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="DELETE Category">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                                 <h4 class="card-title" style="font-family: 'Courgette', cursive;">{{category}}</h4>
                                 <p class="card-text">{{categories[category]['description']}}</p>
@@ -52,22 +56,30 @@
                                 {% for recipe in recipes %}
                                 {% if recipes[recipe]['category'] == category %}
                                 <div class="card" style="margin-bottom: 5px">
-                                    <div class="card-header" role="tab" id="recipeOne">
+                                    <div class="card-header" role="tab" id="{{recipe}}">
                                         <h5 class="mb-0">
-                                            {{recipes[recipe]['name']}}
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{recipe}}" aria-expanded="true" aria-controls="collapseOne">
+                                                {{recipes[recipe]['name']}}
+                                            </a>
                                         </h5>
                                     </div>
-                                    <div class="card-block">
-                                        <h6>Fun Fact</h6>
-                                        <p>{{recipes[recipe]['fun_fact']}}</p>
-                                        <h6>Ingredients</h6>
-                                        <p>{{recipes[recipe]['ingredients']}}</p>
-                                        <h6>Directions and Serving</h6>
-                                        <p>{{recipes[recipe]['description']}}</p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-info" id="editRecipeBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</a>
-                                        <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</a>
+                                    <div id="collapse{{recipe}}" class="collapse hide" role="tabpanel" aria-labelledby="{{recipe}}">
+                                        <div class="card-block">
+                                            <h6>Fun Fact</h6>
+                                            <p>{{recipes[recipe]['fun_fact']}}</p>
+                                            <h6>Ingredients</h6>
+                                            {% for item in recipes[recipe]['ingredients'] %}
+                                            <p>{{item}}</p>
+                                            {% endfor %}
+                                            <h6>Directions and Serving</h6> 
+                                            {% for item in recipes[recipe]['description'] %}                                       
+                                            <p>{{item}}</p>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="card-footer">
+                                            <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-info" id="editRecipeBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</a>
+                                            <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</a>
+                                        </div>
                                     </div>
                                 </div>
                                 {% endif %}

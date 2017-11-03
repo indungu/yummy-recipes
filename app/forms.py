@@ -9,14 +9,25 @@ class SignupForm(FlaskForm):
         [
             validators.data_required(),
             validators.Length(min=6, max=35),
-            validators.email(message="Invalid email address")
+            validators.email(message="Invalid email address"),
+            validators.regexp(
+                r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
+                flags=0, message="Invalid email address"
+            )
         ]
     )
     username = StringField(
-        'Username', [validators.data_required(), validators.Length(min=4, max=25)]
+        'Username', [
+            validators.data_required(),
+            validators.Length(min=3, max=25),
+            validators.regexp(
+                r"(^[a-zA-Z _.+-]+$)",
+                message="Only text characters allowed for username."
+            )
+        ]
     )
     password = PasswordField('New Password', [
-        validators.DataRequired(),
+        validators.input_required(),
         validators.EqualTo('confirm', message='Passwords must match'),
         validators.length(min=8, message='Password needs to be atleast 8 characters long')
     ])
@@ -27,7 +38,10 @@ class LoginForm(FlaskForm):
     """The signup form"""
     email = StringField('Email Address', [
         validators.data_required(),
-        validators.email(message="Invalid email address")
+        validators.email(message="Invalid email address"),
+        validators.regexp(
+            r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", message="Invalid email address"
+        )
     ])
     password = PasswordField('Password', [
         validators.DataRequired()
@@ -37,8 +51,12 @@ class LoginForm(FlaskForm):
 class CategoryForm(FlaskForm):
     """The new category form"""
     name = StringField('Name', [
-        validators.data_required('Please name your category'),
-        validators.length(min=4, max=10, message='Name should be 4-10 characters long')
+        validators.input_required('Please name your category'),
+        validators.length(min=4, max=10, message='Name should be 4-10 characters long'),
+        validators.regexp(
+            r"(^[a-zA-Z _.+-]+$)",
+            message="Only text characters allowed for category name."
+        )
     ])
     description = TextAreaField('Description', [
         validators.data_required('A description would be nice.'),
@@ -49,7 +67,11 @@ class RecipeForm(FlaskForm):
     """This defines the form for recipe manipulation"""
     name = StringField('Name', [
         validators.data_required('A name for your recipe would be nice'),
-        validators.length(min=4, message="The name should be more than 4 characters long")
+        validators.length(min=4, message="The name should be more than 4 characters long"),
+        validators.regexp(
+            r"(^[a-zA-Z _.+-]+$)",
+            message="Only text characters allowed for recipe name."
+        )
     ])
     fun_fact = StringField('Fun Fact')
     ingredients = TextAreaField('Ingredients', [

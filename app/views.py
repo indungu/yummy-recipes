@@ -1,5 +1,4 @@
 """Views module"""
-import sys
 from functools import wraps
 from flask import render_template, request, redirect, url_for, flash, session
 
@@ -33,7 +32,7 @@ def index():
     title = "Welcome"
     if "logged_in" not in session:
         return render_template('index.html', title=title)
-    if session['logged_in'] == True:
+    if session['logged_in']:
         return redirect(url_for('dashboard'))
 
 @APP.route('/signup', methods=['GET', 'POST'])
@@ -46,11 +45,10 @@ def signup():
         flash(status)
         if status == "Sorry, that email is already registered.":
             return redirect(url_for('signup'))
-        else:
-            return redirect(url_for('login'))
+        return redirect(url_for('login'))
     elif "logged_in" not in session:
         return render_template('signup.html', title=title, form=form)
-    if session['logged_in'] == True:
+    if session['logged_in']:
         return redirect(url_for('dashboard'))
 
 @APP.route('/login', methods=['GET', 'POST'])
@@ -70,7 +68,6 @@ def login():
             session['user'] = form.email.data
             session['username'] = USERS[form.email.data]['username']
             session["logged_in"] = True
-            print(session)
             return redirect(url_for('dashboard', user=session['username']))
     return render_template('login.html', title=title, form=form)
 
@@ -86,22 +83,19 @@ def logout():
 @is_authorized
 def dashboard():
     """route to dashboard view"""
-  
+
     title = "Dashboard"
     form = CategoryForm()
     if request.method == 'POST' and form.validate():
         status = CATEGORY.add_category(form.name.data, form.description.data, session['user'])
         if status == "Sorry. Category already exists":
             flash(status)
-        else: 
+        else:
             return redirect(url_for('dashboard'))
-    print(CATEGORY.recipes)
     user_categories = {}
     for category in CATEGORIES:
         if CATEGORIES[category]['owner'] == session['user']:
-           user_categories[category] = CATEGORIES[category]
-        else: # pragma: no cover
-            user_categories
+            user_categories[category] = CATEGORIES[category]
     return render_template('dashboard.html',
                            title=title,
                            form=form,
@@ -120,8 +114,8 @@ def add_recipe(category):
             'category': category,
             'name': '_'.join(form.name.data.split()),
             'fun_fact': form.fun_fact.data,
-            'ingredients': form.ingredients.data,
-            'description': form.description.data
+            'ingredients': form.ingredients.data.split('\r\n'),
+            'description': form.description.data.split('\r\n')
         }
         confirmation = RECIPE.add_recipe(category, recipe)
         flash(confirmation)
@@ -141,15 +135,18 @@ def edit_category(name):
             return redirect(url_for('dashboard'))
         form.name.data = category['name']
         form.description.data = category['description']
-        return render_template('edit_category.html', form=form, title=title)
+        return render_template('edit_category.html', form=form, title=title, name=name)
     if form.validate():
-        mod_recipe = CATEGORY.set_category(form.name.data, form.description.data, session['user'])
-
-        if mod_recipe == 'Category does not exist.':
-            flash('Sorry, Category does not exist.')
-            return redirect(url_for('dashboard'))
+        updated_category = CATEGORY.set_category(name, form.description.data, session['user'])
+        updated_category['name'] = form.name.data
+        for recipe in CATEGORY.recipes:
+            if CATEGORY.recipes[recipe]['category'] == name: # pragma: no cover
+                CATEGORY.recipes[recipe]['category'] = form.name.data
         flash('Category updated successfully')
+        CATEGORIES[form.name.data] = CATEGORIES.pop(name)
         return redirect(url_for('dashboard'))
+    flash('Invalid form details, please check your category name.')
+    return redirect(url_for('edit_category', name=name))
 
 @APP.route('/delete_category/<name>')
 @is_authorized
@@ -159,9 +156,7 @@ def delete_category(name):
     if category == 'Category does not exist.':
         flash('Sorry, category '+name+' does not exist.')
         return redirect(url_for('dashboard'))
-    removed = CATEGORIES.pop(name)
-    print(removed)
-    print(CATEGORY.recipes)
+    CATEGORIES.pop(name)
     recipes_to_delete = []
     for recipe in CATEGORY.recipes:
         if CATEGORY.recipes[recipe]['category'] == name:
@@ -182,17 +177,17 @@ def edit_recipe(category, name):
         if recipe == 'Recipe does not exist':
             flash(recipe)
             return redirect(url_for('dashboard'))
-        form.name.data = CATEGORIES[category]['recipes'][name]['name']
-        form.fun_fact.data = CATEGORIES[category]['recipes'][name]['fun_fact']
-        form.ingredients.data = CATEGORIES[category]['recipes'][name]['ingredients']
-        form.description.data = CATEGORIES[category]['recipes'][name]['description']
+        form.name.data = recipe['name']
+        form.fun_fact.data = recipe['fun_fact']
+        form.ingredients.data = "\r\n".join(recipe['ingredients'])
+        form.description.data = "\r\n".join(recipe['description'])
         return render_template('edit_recipe.html', form=form, title=title, category=category)
     if form.validate_on_submit():
         mod_recipe = RECIPE.set_recipe(category, name, {
             'name': '_'.join(form.name.data.split()),
             'fun_fact': form.fun_fact.data,
-            'ingredients': form.ingredients.data,
-            'description': form.description.data
+            'ingredients': form.ingredients.data.split('\r\n'),
+            'description': form.description.data.split('\r\n')
         })
         if mod_recipe == 'Recipe does not exist':
             flash('Sorry, recipe does not exist.')
@@ -210,6 +205,6 @@ def delete_recipe(category, name):
     if recipe == 'Recipe does not exist':
         flash('Sorry, recipe '+name+' does not exist.')
         return redirect(url_for('dashboard'))
-    removed = CATEGORIES[category]['recipes'].pop(name)
+    CATEGORIES[category]['recipes'].pop(name)
     flash('Recipe '+name+' was removed successfully.')
     return redirect(url_for('dashboard'))
