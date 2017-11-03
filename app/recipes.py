@@ -35,7 +35,7 @@ class Categories(object):
 
     def set_category(self, name, description, owner):
         """Returns the updated category or error message"""
-        if name in CATEGORIES:
+    if name in CATEGORIES:    
             CATEGORIES[name] = {
                 "name": name,
                 "description": description,
