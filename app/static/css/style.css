@@ -6,11 +6,6 @@ body {
     margin-bottom: 60px;
 }
 
-#breadcrumb {
-    margin-top: 10px !important;
-    color: #ffffff;
-}
-
 .footer {
     position: absolute;
     bottom: 0;
@@ -23,11 +18,23 @@ body {
 }
 
 /*form class*/
-.form{
+.form {
     background-color: rgba(14, 35, 47, 0.9);
     max-width: 350px;
     padding: 30px;
     margin: 5px  auto;
+    margin-bottom: 70px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 11px 3px rgba(14, 35, 47, 0.39);
+}
+
+/*form class*/
+.formedit{
+    background-color: rgba(14, 35, 47, 0.9);
+    max-width: 500px;
+    padding: 30px;
+    margin: 5px  auto;
+    margin-bottom: 70px;
     border-radius: 5px;
     box-shadow: 0px 3px 11px 3px rgba(14, 35, 47, 0.39);
 }

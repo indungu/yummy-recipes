@@ -3,7 +3,7 @@
 {% block body %}
 {% from "_formhelper.html" import render_field %}
 <div class="container">
-   <form class="form" action="/edit_recipe/{{category}}/{{form.name.data}}" method="POST">
+   <form class="formedit" action="/edit_recipe/{{category}}/{{form.name.data}}" method="POST">
         {{form.hidden_tag()}}
         <div class="form-group">
             <strong class="text-primary">Category</strong>
@@ -16,10 +16,12 @@
             {{render_field(form.fun_fact, class="form-control")}}
         </div>
         <div class="form-group">
-            {{render_field(form.ingredients, class="form-control")}}        
+            {{render_field(form.ingredients, class="form-control")}} 
+            <script>CKEDITOR.replace('ingredients')</script>       
         </div>
         <div class="form-group">
             {{render_field(form.description, class="form-control form-control-static")}}
+            <script>CKEDITOR.replace('description')</script>
         </div>
         <div class="form-group">
             <a class="btn btn-outline-primary" href="/dashboard">Cancel</a>

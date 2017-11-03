@@ -4,10 +4,10 @@
 
 {% from "_formhelper.html" import render_field %}
 <div class="container">
-   <form class="form" action="/edit_category/{{form.name.data}}" method="POST">
+   <form class="formedit" action="/edit_category/{{name}}" method="POST">
         {{form.hidden_tag()}}
         <div class="form-group">
-            {{render_field(form.name, class="form-control category")}}
+            {{render_field(form.name, class="form-control category text-white")}}
         </div>
         <div class="form-group">
             {{render_field(form.description, class="form-control")}}        
