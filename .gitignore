@@ -3,4 +3,4 @@ __pycache__/
 .vscode/
 *.pyc
 .cache/
-ckeditor/
+.coverage
