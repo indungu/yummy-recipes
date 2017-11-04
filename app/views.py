@@ -1,13 +1,13 @@
 """Views module"""
 from functools import wraps
 from flask import render_template, request, redirect, url_for, flash, session
-
+from werkzeug.security import check_password_hash
 from app import APP
 from .forms import SignupForm, LoginForm, CategoryForm, RecipeForm
 from .users import User, USERS
 from .recipes import CATEGORIES, Categories, Recipes
 
-USER = User()
+
 CATEGORY = Categories()
 RECIPE = Recipes()
 
@@ -41,7 +41,8 @@ def signup():
     title = "Sign Up"
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
-        status = USER.add_user(form.email.data, form.username.data, form.password.data)
+        user = User(form.email.data, form.username.data, form.password.data)
+        status = user.add_user()
         flash(status)
         if status == "Sorry, that email is already registered.":
             return redirect(url_for('signup'))
@@ -53,22 +54,21 @@ def signup():
 
 @APP.route('/login', methods=['GET', 'POST'])
 def login():
-    """login view route"""
+    """ login view route """
     title = "Login"
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = USER.get_user(form.email.data, form.password.data)
-        if user == "User not found!":
+        email = form.email.data
+        if email not in USERS:
             flash('Invalid/Unregistered user! Sign Up to create account.')
             return redirect(url_for('signup'))
-        elif user == "Password error!":
-            flash(user+'. Please enter the correct details.')
-            return redirect(url_for('login'))
-        elif user["email"] == form.email.data:
-            session['user'] = form.email.data
-            session['username'] = USERS[form.email.data]['username']
+        elif check_password_hash(USERS[email].password, form.password.data):
+            session['user'] = email
+            session['username'] = USERS[email].username
             session["logged_in"] = True
             return redirect(url_for('dashboard', user=session['username']))
+        flash('Password error. Please enter the correct details.')
+        return redirect(url_for('login'))
     return render_template('login.html', title=title, form=form)
 
 @APP.route('/logout/')

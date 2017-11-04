@@ -16,7 +16,8 @@ class RoutesTestCase(TestCase):
         self.user_email = "win@user.me"
         self.username = "user"
         self.user_password = "password"
-        self.user = User()
+        self.user = User(self.user_email, self.username, self.user_password)
+        self.user.add_user()
 
     def tearDown(self):
         """The following is done at the end of each test"""
@@ -62,8 +63,8 @@ class RoutesTestCase(TestCase):
             category='Pies',
             name='Apple Pie',
             fun_fact='Pilgrims thanksgiving gift to the Native Americans',
-            ingredients='Some of this\nSome of that',
-            description='Do this\nThen that\nThen the other\nPrepare with care, serve with love'
+            ingredients='Some of this\r\nSome of that',
+            description='Do this\r\nThen that\r\nThen the other\r\nPrepare and serve with love'
         ), follow_redirects=True)
 
     # Ensure that welcome page loads on the root route
@@ -85,6 +86,8 @@ class RoutesTestCase(TestCase):
         """Test if the signup route/url opens"""
         response = self.test_app.get('/signup')
         self.assertIn(b'Yummy Recipes | Sign Up', response.data)
+        # Ensure users are redicted to login page after successful signup
+        self.user.delete_user()
         response = self.signup()
         self.assertIn(b'Yummy Recipes | Login', response.data)
         # Assert the same email cannot register a new account
@@ -112,7 +115,7 @@ class RoutesTestCase(TestCase):
         self.assertIn(b'Yummy Recipes | Sign Up', response.data)
         # Wrong password
         response = self.login(self.user_email, "fake_pass")
-        self.assertIn(b'Password error!. Please enter the correct details.\n', response.data)
+        self.assertIn(b'Password error. Please enter the correct details.\n', response.data)
         self.assertIn(b'Yummy Recipes | Login', response.data)
 
 
