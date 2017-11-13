@@ -218,10 +218,10 @@ class RoutesTestCase(TestCase):
         # Ensure that the edit recipe view loads
         response = self.test_app.get('/edit_recipe/Pies/Apple_Pie', follow_redirects=True)
         self.assertIn(b'Yummy Recipes | Edit Recipe', response.data)
-        # Ensure that incorrect recipes are flagged
+        # Ensure that incorrect/non-existent recipes are flagged
         response = self.test_app.get('/edit_recipe/Cookies/Chocolate_Chip', follow_redirects=True)
         self.assertIn(b'Recipe does not exist', response.data)
-        # Ensure that exiting recipes can be updated
+        # Ensure that selected recipe can be updated
         response = self.test_app.post('/edit_recipe/Pies/Apple_Pie', data=dict(
             category='Pies',
             name='Pot Pie',
@@ -230,7 +230,7 @@ class RoutesTestCase(TestCase):
             description='Prepare with care, serve with lots of love and other smaller pies'
         ), follow_redirects=True)
         self.assertIn(b'Recipe updated successfully.', response.data)
-        # Ensure that exiting recipes can't be updated with invalid data
+        # Ensure that existing recipes can't be updated with invalid data
         response = self.test_app.post('/edit_recipe/Pies/Apple_Pie', data=dict(
             category='Pies',
             name='Pot Pie',
@@ -239,7 +239,7 @@ class RoutesTestCase(TestCase):
             description=''
         ), follow_redirects=True)
         self.assertIn(b'Sorry you provided invalid values, Please try again.', response.data)
-        # Ensure that exiting category name can't be updated
+        # Ensure incorrect/non-existent recipes can't be updated
         response = self.test_app.post('/edit_recipe/Pies/Chicken_Pot_Pie', data=dict(
             category='Pies',
             name='Chicken Pot Pie',
@@ -249,6 +249,25 @@ class RoutesTestCase(TestCase):
         ), follow_redirects=True)
         self.assertIn(b'Yummy Recipes | Dashboard', response.data)
         self.assertIn(b'Sorry, recipe does not exist.', response.data)
+        # Ensure that existing recipe can't not be altered from another
+        # recipes edit request
+        self.test_app.post('/add_recipe/Pies', data=dict(
+            category='Pies',
+            name='Chicken Pot Pie',
+            fun_fact='Pilgrims thanksgiving gift to the Native Americans',
+            ingredients='Some of this\r\nSome of that',
+            description='Do this\r\nThen that\r\nThen the other\r\nPrepare and serve with love'
+        ), follow_redirects=True)
+        response = self.test_app.post('/edit_recipe/Pies/Chicken_Pot_Pie', data=dict(
+            category='Pies',
+            name='Pot Pie',
+            fun_fact='Yes, it is indeed a pie with pot',
+            ingredients='Pot\nGoogle\nPie',
+            description='Prepare with care, serve with lots of love and other smaller pies'
+        ), follow_redirects=True)
+        self.assertIn(
+            b"The name provided is of an existing recipe. Please choose another", response.data
+        )
 
     def test_delete_recipe_route(self):
         """Tests for the category delete feature route"""

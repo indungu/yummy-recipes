@@ -77,43 +77,39 @@
                             {% for category in categories %}
                                 <div class="tab-pane" id="{{category}}Tab" role="tabpanel">
                                     {% if recipes %}
-                                    {% for recipe in recipes %}
-                                        {% if recipes[recipe]['category'] == category %}
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                                <th>Name</th>
-                                                <th>Fun Fact</th>
-                                                <th>Action</th>
-                                            </thead>
-                                            {% for recipe in recipes %}
-                                                {% if recipes[recipe]['category'] == category %}
-                                                    <tr>
-                                                        <td>{{recipes[recipe]['name']}}</td>
-                                                        <td>
-                                                            {% if recipes[recipe]['fun_fact'] %}
-                                                            {{recipes[recipe]['fun_fact']}}
-                                                            {% endif %}
-                                                            {% if not recipes[recipe]['fun_fact'] %}
-                                                            This recipe has no fun fact.
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>
-                                                            <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#{{recipe}}DetailModal">
-                                                                <i class="fa fa-eye" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="View {{recipe}} Details"></i>
-                                                            </button>
-                                                            <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-primary btn-sm" id="editRecipeBtn">
-                                                                <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Edit {{recipe}} Details"></i>
-                                                            </a>
-                                                            <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger btn-sm" id="delRecipeBtn">
-                                                                <i class="fa fa-trash-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="DELETE {{recipe}} ?!"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </table>
-                                        {% endif %}
-                                    {% endfor %}
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th>Name</th>
+                                            <th>Fun Fact</th>
+                                            <th>Action</th>
+                                        </thead>
+                                        {% for recipe in recipes %}
+                                            {% if recipes[recipe]['category'] == category %}
+                                                <tr>
+                                                    <td>{{recipes[recipe]['name']}}</td>
+                                                    <td>
+                                                        {% if recipes[recipe]['fun_fact'] %}
+                                                        {{recipes[recipe]['fun_fact']}}
+                                                        {% endif %}
+                                                        {% if not recipes[recipe]['fun_fact'] %}
+                                                        This recipe has no fun fact.
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#{{recipe}}DetailModal">
+                                                            <i class="fa fa-eye" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="View {{recipe}} Details"></i>
+                                                        </button>
+                                                        <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-primary btn-sm" id="editRecipeBtn">
+                                                            <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Edit {{recipe}} Details"></i>
+                                                        </a>
+                                                        <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger btn-sm" id="delRecipeBtn">
+                                                            <i class="fa fa-trash-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="DELETE {{recipe}} ?!"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </table>
                                     {% endif %}
                                     <div class="card-footer d-flex flex-row-reverse">
                                         <a href="/add_recipe/{{category}}" class="btn btn-outline-primary">Add Recipe</a>

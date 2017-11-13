@@ -184,17 +184,23 @@ def edit_recipe(category, name):
         form.description.data = "\r\n".join(recipe['description'])
         return render_template('edit_recipe.html', form=form, title=title, category=category)
     if form.validate_on_submit():
-        mod_recipe = RECIPE.set_recipe(category, name, {
-            'name': '_'.join(form.name.data.split()),
-            'fun_fact': form.fun_fact.data,
-            'ingredients': form.ingredients.data.split('\r\n'),
-            'description': form.description.data.split('\r\n')
-        })
-        if mod_recipe == 'Recipe does not exist':
-            flash('Sorry, recipe does not exist.')
+        recipe_new_name = '_'.join(form.name.data.split())
+        if recipe_new_name not in CATEGORY.recipes:
+            mod_recipe = RECIPE.set_recipe(category, name, {
+                'name': recipe_new_name,
+                'fun_fact': form.fun_fact.data,
+                'ingredients': form.ingredients.data.split('\r\n'),
+                'description': form.description.data.split('\r\n')
+            })
+            if mod_recipe == 'Recipe does not exist':
+                flash('Sorry, recipe does not exist.')
+                return redirect(url_for('dashboard'))
+            flash('Recipe updated successfully.')
             return redirect(url_for('dashboard'))
-        flash('Recipe updated successfully.')
-        return redirect(url_for('dashboard'))
+        flash('The name provided is of an existing recipe. Please choose another')
+        return redirect(url_for(
+            'edit_recipe', form=form, title=title, category=category, name=name
+        ))
     flash('Sorry you provided invalid values, Please try again.')
     return redirect(url_for('edit_recipe', category=category, name=name))
 
