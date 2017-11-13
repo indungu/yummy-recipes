@@ -100,7 +100,8 @@ def dashboard():
                            title=title,
                            form=form,
                            user=session['username'],
-                           categories=user_categories
+                           categories=user_categories,
+                           recipes=CATEGORY.recipes
                           )
 
 @APP.route('/add_recipe/<category>', methods=['GET', 'POST'])

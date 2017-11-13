@@ -71,6 +71,27 @@
                             </li>
                         </ul>
                     {% endif %}
+                    {% if (title == "Add Recipe") %}
+                    <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                    {% if (title == "Edit Recipe") %}
+                    <ul class="navbar-nav flex-row ml-md-auto d-md-flex">>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                    {% if (title == "Edit Category") %}
+                    <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-danger text-danger" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                    {% endif %}
                 </div>
             </nav>
         </header>

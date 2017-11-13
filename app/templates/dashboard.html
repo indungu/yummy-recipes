@@ -5,6 +5,7 @@
 <section id="main">
     <div class="container" style="margin-top: 15px;">
         <div class="row">
+            <!-- Side Panel -->
             <div class="col-md-3">
                 <ul class="list-group" style="margin-bottom: 10px">
                     <button type="button" class="list-group-item list-group-item-action active" data-toggle="tooltip" data-placement="top" title="You are here">View Categories</button>
@@ -13,84 +14,116 @@
                     </button>
                 </ul>
             </div>
+            <!-- Main Panel -->
             <div class="col-md-9" style="margin-bottom: 70px">
+                <!-- Categories -->
                 <div class="card text-center">
                     <div class="card-header">
                         Categories
                     </div>
                     <div class="row card-block">
                         {% if categories %}
-                        {% for category in categories %}
-                        <div class="col-md-3">
-                            <div class="well">
-                                <div class="well" style="margin: 5px">
-                                    <a href="/edit_category/{{category}}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Category">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>
-                                    <a href="/delete_category/{{category}}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="DELETE Category">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                                <h4 class="card-title" style="font-family: 'Courgette', cursive;">{{category}}</h4>
-                                <p class="card-text">{{categories[category]['description']}}</p>
-                                <a data-toggle="collapse" href="#collapse{{category}}" class="btn btn-primary" aria-expanded="true" aria-controls="collapse{{category}}">View Recipes</a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        {% if not categories %}<div class="container"><span class="text-muted text-center" style="font-family: 'Kaushan Script', cursive; font-size: 24px;">You currently have no categories.</span></div>{% endif %}
-                    </div>
-                </div>
-
-                <!-- Recipes -->
-                {% for category in categories %}
-                <div class="collapse" id="collapse{{category}}">
-                    <div class="card" style="margin-top: 10px">
-                        <div class="card-header">
-                            {{category}}
-                            <a href="/add_recipe/{{category}}" class="btn btn-outline-primary">Add Recipe</a>
-                        </div>
-                        <div class="card-block">
-                            <div id="accordion" role="tablist" aria-multiselectable="true">
-                                {% with recipes = categories[category]['recipes'] %}
-                                {% for recipe in recipes %}
-                                {% if recipes[recipe]['category'] == category %}
-                                <div class="card" style="margin-bottom: 5px">
-                                    <div class="card-header" role="tab" id="{{recipe}}">
-                                        <h5 class="mb-0">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{recipe}}" aria-expanded="true" aria-controls="collapseOne">
-                                                {{recipes[recipe]['name']}}
-                                            </a>
-                                        </h5>
-                                    </div>
-                                    <div id="collapse{{recipe}}" class="collapse hide" role="tabpanel" aria-labelledby="{{recipe}}">
-                                        <div class="card-block">
-                                            <h6>Fun Fact</h6>
-                                            <p>{{recipes[recipe]['fun_fact']}}</p>
-                                            <h6>Ingredients</h6>
-                                            {% for item in recipes[recipe]['ingredients'] %}
-                                            <p>{{item}}</p>
-                                            {% endfor %}
-                                            <h6>Directions and Serving</h6> 
-                                            {% for item in recipes[recipe]['description'] %}                                       
-                                            <p>{{item}}</p>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="card-footer">
-                                            <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-info" id="editRecipeBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</a>
-                                            <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Recipe</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
+                        <table class="table table-striped">
+                            <thead class="thead-inverse">
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                <tr class="text-left">
+                                    <td style="font-family: 'Courgette', cursive;">{{category}}</td>
+                                    <td>{{categories[category]['description']}}</td>
+                                    <td>
+                                        <a href="/edit_category/{{category}}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Edit Category">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="/delete_category/{{category}}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="DELETE Category" onclick="deleteWarning()">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                                {% endwith %}
-
-                            </div>
+                            </tbody>
+                        </table>
+                        {% endif %}
+                        {% if not categories %}
+                        <div class="container">
+                            <span class="text-muted text-center" style="font-family: 'Kaushan Script', cursive; font-size: 24px;">You currently have no categories.</span>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
+                <!-- Coutesy/Info -->
+                {% if categories %}
+                    <div class="container text-center" style="background-color: rgba(14, 35, 47, 0.75); padding: 5px 0px 5px 0px; margin-top: 10px">
+                        <span class="text-white" style="font-size: 16px; font-family: 'Courgette', cursive;">Click to View or Add recipe to the categories below.</span>
+                    </div>
+                {% endif %}
+                <!-- Recipes -->
+                {% if categories %}
+                <div class="card" style="margin-top: 10px">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                            {% for category in categories %}
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#{{category}}Tab" role="tab">{{category}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-block tab-content">
+                        {% if categories %}
+                            {% for category in categories %}
+                                <div class="tab-pane" id="{{category}}Tab" role="tabpanel">
+                                    {% if recipes %}
+                                    {% for recipe in recipes %}
+                                        {% if recipes[recipe]['category'] == category %}
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <th>Name</th>
+                                                <th>Fun Fact</th>
+                                                <th>Action</th>
+                                            </thead>
+                                            {% for recipe in recipes %}
+                                                {% if recipes[recipe]['category'] == category %}
+                                                    <tr>
+                                                        <td>{{recipes[recipe]['name']}}</td>
+                                                        <td>
+                                                            {% if recipes[recipe]['fun_fact'] %}
+                                                            {{recipes[recipe]['fun_fact']}}
+                                                            {% endif %}
+                                                            {% if not recipes[recipe]['fun_fact'] %}
+                                                            This recipe has no fun fact.
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#{{recipe}}DetailModal">
+                                                                <i class="fa fa-eye" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="View {{recipe}} Details"></i>
+                                                            </button>
+                                                            <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-primary btn-sm" id="editRecipeBtn">
+                                                                <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Edit {{recipe}} Details"></i>
+                                                            </a>
+                                                            <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger btn-sm" id="delRecipeBtn">
+                                                                <i class="fa fa-trash-o" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="DELETE {{recipe}} ?!"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </table>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                    <div class="card-footer d-flex flex-row-reverse">
+                                        <a href="/add_recipe/{{category}}" class="btn btn-outline-primary">Add Recipe</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
                 <!-- Category modal -->
                 <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -118,6 +151,43 @@
                         </div>
                     </div>
                 </div>
+                <!-- Recipe detail modal -->
+                {% for category in categories %}
+                    {% for recipe in recipes %}
+                    <div class="modal fade" id="{{recipe}}DetailModal" tabindex="-1" role="dialog" aria-labelledby="{{recipe}}DetailModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="recipeDetailModalLabel">{{recipe}} Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="card-block">
+                                    {% if recipes[recipe]['fun_fact'] %}
+                                    <h6>Fun Fact</h6>
+                                    <p>{{recipes[recipe]['fun_fact']}}</p>
+                                    {% endif %}
+                                    <h6>Ingredients</h6>
+                                    <ul>
+                                        {% for item in recipes[recipe]['ingredients'] %}
+                                        <li>{{item}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <h6>Directions and Serving</h6> 
+                                    {% for item in recipes[recipe]['description'] %}                                       
+                                    <p>{{item}}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="card-footer">
+                                    <a href="/edit_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-outline-info" id="editRecipeBtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Recipe</a>
+                                    <a href="/delete_recipe/{{category}}/{{'_'.join(recipe.split())}}" class="btn btn-danger" id="delRecipeBtn"><i class="fa fa-tdash-o" aria-hidden="true"></i> Delete Recipe</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
                 
             </div>
         </div>
