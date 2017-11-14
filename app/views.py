@@ -185,7 +185,7 @@ def edit_recipe(category, name):
         return render_template('edit_recipe.html', form=form, title=title, category=category)
     if form.validate_on_submit():
         recipe_new_name = '_'.join(form.name.data.split())
-        if recipe_new_name not in CATEGORY.recipes:
+        if recipe_new_name == name or recipe_new_name not in CATEGORY.recipes:
             mod_recipe = RECIPE.set_recipe(category, name, {
                 'name': recipe_new_name,
                 'fun_fact': form.fun_fact.data,
