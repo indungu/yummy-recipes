@@ -63,8 +63,10 @@ class Recipes(object):
     def add_recipe(self, category, recipe):
         """Add a new recipe only to existing categories"""
         if category in CATEGORIES:
-            CATEGORIES[category]['recipes'][recipe['name']] = recipe
-            return "Recipe added successfully."
+            if recipe['name'] not in CATEGORIES[category]['recipes']:
+                CATEGORIES[category]['recipes'][recipe['name']] = recipe
+                return "Recipe added successfully."
+            return "Recipe already exists. Choose another name."
         return "Category does not exist."
 
     def get_recipe(self, category, name):
